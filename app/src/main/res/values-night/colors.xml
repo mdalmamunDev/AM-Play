@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_Light">#3500B5</color>
+    <color name="primary">#AC9AFF</color>
+    <color name="primary_2_Light">#403700</color>
+    <color name="primary_2_color">#A89700</color>
+    <color name="primary_2_dark">#FFE600</color>
+    <color name="accent">#C7AFFF</color>
+    <color name="status_bar">#000000</color>
+    <color name="def_bg">#000000</color>
+    <color name="def_text">#E1E0E0</color>
+    <color name="def_text_light">#D8D5D3D3</color>
+    <color name="def_text_light_x">#9FD5D3D3</color>
+    <color name="trans_dark">#22FFFFFF</color>
+    <color name="trans_dark_x">#4AFFFFFF</color>
+    <color name="bg_blur">#75000000</color>
+    <color name="bg_blur_x">#C4000000</color>
+</resources>

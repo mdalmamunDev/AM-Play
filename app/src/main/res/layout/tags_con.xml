@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/tags_con"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+<!--        <include layout="@layout/tag_single" />-->
+        <TextView
+            style="@style/tag.normal"
+            android:text="@string/no_tags" />
+        <!--<TextView
+            style="@style/tag.selected"
+            android:text="Broken" />
+        <TextView
+            style="@style/tag.selected"
+            android:text="Heat" />
+        <TextView
+            style="@style/tag.selected"
+            android:text="Rain" />
+        <TextView
+            style="@style/tag.selected"
+            android:text="@string/tag" />
+        <TextView
+            style="@style/tag.selected"
+            android:text="@string/tag" />
+        <TextView
+            style="@style/tag.selected"
+            android:text="@string/tag" />
+        <TextView
+            style="@style/tag.selected"
+            android:text="@string/tag" />
+        <TextView
+            style="@style/tag.selected"
+            android:text="@string/tag" />
+        <TextView
+            style="@style/tag.selected"
+            android:text="@string/tag" />
+        <TextView
+            style="@style/tag.normal"
+            android:text="@string/tag"/>-->
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</HorizontalScrollView>

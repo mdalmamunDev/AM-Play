@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/def_bg">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_10"
+            android:padding="@dimen/dp_5">
+
+            <TextView
+                android:id="@+id/editHeaderTitleView"
+                style="@style/text.20"
+                android:text="@string/tag_editor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/editAlbumArt"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/dp_50"
+                android:layout_marginVertical="@dimen/dp_10"
+                android:scaleType="centerCrop"
+                android:src="@drawable/img_def_album_art"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editHeaderTitleView" />
+
+<!--   edit inputs ends     -->
+            <!--    title    -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editAlbumArt">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/title">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetTitle"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--    album    -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_album"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_title">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/album">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_album"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetAlbum"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--    artist    -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_album">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/artist">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_artist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetArtist"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+             <!--    album artis    -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_albumArtist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_artist">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/album_artist">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_AlbumArtist"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetAlbumArtist"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--    genre    -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_genre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_albumArtist">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/genre">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_genre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetGenre"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--    tags    -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_genre">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/tags">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetTags"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--    year    -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_year"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_tags">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/year">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_year"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetYear"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--    date    -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_year">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/date_hint">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetDate"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--    track        -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_track"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_date">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/track">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_track"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetTrack"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <!--     rename       -->
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/cb_rename"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="@string/rename"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_track" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/inputCon_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cb_rename">
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/textInputLayout"
+                    android:hint="@string/name">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/ib_btnResetName"
+                    style="@style/btn.setInput"/>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+<!--   edit inputs ends     -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/inputCon_name" >
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/editBtnSave"
+                    style="@style/btn.borderGradient"
+                    android:text="@string/save"
+                    android:layout_alignParentStart="true"/>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/editBtnReset"
+                    style="@style/btn.borderGradient"
+                    android:text="@string/reset"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/editBtnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/trans"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

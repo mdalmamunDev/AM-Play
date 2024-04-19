@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/trans"
+    tools:context=".fragments.FragSongs">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_min_3"
+        app:cardElevation="@dimen/dp_3"
+        android:backgroundTint="@color/def_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/dp_50">
+
+
+            <TextView
+                android:id="@+id/tv_totalSongCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="@dimen/dp_35"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:layout_marginHorizontal="@dimen/dp_3"
+                android:layout_marginStart="@dimen/dp_5"
+                android:text="@string/total_songs" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:visibility="gone"
+                android:id="@+id/tagBar_con_outer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_8"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+                <include layout="@layout/tags_con" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/tagBar_con_outer_placeholder"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_8"
+                android:layout_gravity="center"
+                android:layout_weight="1">
+            <include layout="@layout/tags_con_placeholder" />
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btn_sort"
+                style="@style/icon.small"
+                android:layout_marginHorizontal="@dimen/dp_5"
+                android:layout_marginStart="@dimen/dp_3"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_sort" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/group_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

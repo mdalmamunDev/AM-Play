@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradient background -->
+    <item>
+        <shape>
+            <gradient
+                android:startColor="@color/primary"
+                android:endColor="@color/primary_2_dark"
+                android:angle="45"
+                android:type="linear" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+    <item android:right="2dp" android:left="2dp" android:top="2dp" android:bottom="2dp">
+        <shape>
+            <solid android:color="@color/def_bg" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+</layer-list>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="0.5dp"
+                android:color="@color/def_text_light"
+                android:dashGap="0.5dp"
+                android:dashWidth="0.5dp"/>
+        </shape>
+    </item>
+    <item android:top="1dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/primary"
+                android:endColor="@color/primary_2_Light"
+                android:angle="45"/>
+<!--            <solid android:color="@color/primary_dark_color"/>-->
+        </shape>
+    </item>
+</layer-list>

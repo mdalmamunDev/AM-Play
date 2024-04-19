@@ -1,0 +1,67 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    android:padding="@dimen/dp_9"
+    android:background="@color/bg_blur_x">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_itemImg"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginEnd="@dimen/dp_100"
+        android:src="@drawable/img_def_album_art"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/text.16"
+        android:text="@string/item_title"
+        android:layout_marginStart="@dimen/dp_10"
+        app:layout_constraintBottom_toTopOf="@+id/playBar_tv_artist"
+        app:layout_constraintStart_toEndOf="@+id/iv_itemImg"
+        app:layout_constraintTop_toTopOf="@+id/iv_itemImg" />
+
+    <TextView
+        android:id="@+id/playBar_tv_artist"
+        style="@style/text.light.13"
+        android:text="@string/_999_songs"
+        android:layout_marginStart="@dimen/dp_10"
+        app:layout_constraintStart_toEndOf="@+id/iv_itemImg"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_itemImg" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/playBar_tv_duration"
+        style="@style/icon.small"
+        android:src="@drawable/ic_menu"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--    Music Playing Animation-->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:visibility="gone"
+        android:id="@+id/anim_music_playing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:background="@color/music_waves_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/playBar_tv_duration"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/music_waves" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

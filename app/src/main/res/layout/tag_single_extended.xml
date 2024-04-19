@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tag_con_single"
+    style="@style/tag.normal">
+    <TextView
+        android:id="@+id/tv_tag"
+        style="@style/text.tag.normal"
+        android:text="@string/tag" />
+    <TextView
+        android:id="@+id/tv_cOpen"
+        style="@style/text.tag.normal"
+        android:text="@string/c_open"/>
+    <TextView
+        android:id="@+id/tv_count"
+        style="@style/text.tag.normal"
+        android:text="@string/total_songs"
+        android:textSize="@dimen/sp_10"/>
+    <TextView
+        android:id="@+id/tv_cClose"
+        style="@style/text.tag.normal"
+        android:text="@string/c_close"/>
+</androidx.appcompat.widget.LinearLayoutCompat>

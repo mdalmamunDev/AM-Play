@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">AM Play</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">Title</string>
+    <string name="artist">Artist</string>
+    <string name="playing_from">Playing From</string>
+    <string name="album_name">Album Name</string>
+    <string name="tag_editor">Tag Editor</string>
+    <string name="album">Album</string>
+    <string name="album_artist">Album artist</string>
+    <string name="genre">Genre</string>
+    <string name="year">Year</string>
+    <string name="track">Track</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="duration">00:00</string>
+    <string name="total_songs">999</string>
+    <string name="dot">•</string>
+    <string name="tag">Tag</string>
+    <string name="date_added">Date added</string>
+    <string name="other">Other</string>
+    <string name="sort_by">Select sort order</string>
+    <string name="date_modified">Date modified</string>
+    <string name="tags">Tags</string>
+    <string name="no_tags">No Tags</string>
+    <string name="item_title">Item title</string>
+    <string name="_999_songs">999 Songs</string>
+    <string name="play_all">Play all</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="settings">Settings</string>
+    <string name="enable_notifications">Enable Notifications</string>
+    <string name="repeat">Repeat</string>
+    <string name="repeat_one">Repeat One</string>
+    <string name="repeat_all">Repeat All</string>
+    <string name="repeat_order">Repeat Order</string>
+    <string name="reset_am_tags">Reset AM Tags</string>
+    <string name="reset">Reset</string>
+    <string name="volume">Volume</string>
+    <string name="processing">Processing</string>
+    <string name="please_wait">Please wait..</string>
+    <string name="date_hint">Date (mm-dd)</string>
+    <string name="name">Name</string>
+    <string name="rename">Rename</string>
+    <string name="set_title">+ - album(yyyy-mm-dd) - artist</string>
+    <string name="set_album">+ (yyyy)</string>
+    <string name="c_open">(</string>
+    <string name="c_close">)</string>
+    <string name="date_release">Date Release</string>
+    <string name="rank">99</string>
+    <string name="item_row_tags">N/A</string>
+</resources>

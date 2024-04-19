@@ -1,0 +1,143 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="myTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+
+
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/status_bar</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+<!--    <style name="Theme.AMPlay" parent="Base.Theme.AMPlay" />-->
+
+
+<!--   Activity Transition -->
+    <style name="CustomTheme" parent="myTheme">
+        <item name="android:windowAnimationStyle">@style/CustomWindowAnimation</item>
+    </style>
+    <style name="CustomWindowAnimation">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_exit</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_exit</item>
+    </style>
+
+
+    <style name="icon.small">
+        <item name="android:layout_width">@dimen/dp_24</item>
+        <item name="android:layout_height">@dimen/dp_24</item>
+        <item name="android:background">@color/trans</item>
+    </style>
+    <style name="icon" parent="icon.small">
+        <item name="android:layout_width">@dimen/dp_40</item>
+        <item name="android:layout_height">@dimen/dp_40</item>
+    </style>
+
+<!--  text styles  -->
+    <style name="text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-condensed-medium</item>
+        <item name="android:textColor">@color/def_text</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="text.light">
+        <item name="android:textColor">@color/def_text_light</item>
+    </style>
+    <style name="text.light.x">
+        <item name="android:textColor">@color/def_text_light_x</item>
+    </style>
+    <style name="text.light.x.11">
+        <item name="android:textSize">@dimen/sp_11</item>
+    </style>
+    <style name="text.light.13">
+        <item name="android:textSize">@dimen/sp_13</item>
+    </style>
+    <style name="text.16">
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+    <style name="text.20">
+        <item name="android:textSize">@dimen/sp_20</item>
+    </style>
+    <style name="text.25">
+        <item name="android:textSize">@dimen/sp_25</item>
+    </style>
+    <style name="text.dot.10" parent="text.light.x.11">
+        <item name="android:layout_marginStart">@dimen/dp_3</item>
+        <item name="android:layout_marginEnd">@dimen/dp_3</item>
+        <item name="android:text">@string/dot</item>
+    </style>
+    <style name="text.dot.11" parent="text.dot.10">
+        <item name="android:textSize">@dimen/sp_11</item>
+    </style>
+    <style name="text.dot.13" parent="text.light.13">
+        <item name="android:layout_marginStart">@dimen/dp_4</item>
+        <item name="android:layout_marginEnd">@dimen/dp_4</item>
+        <item name="android:text">@string/dot</item>
+    </style>
+    <style name="text.dot.16" parent="text.16">
+        <item name="android:layout_marginStart">@dimen/dp_5</item>
+        <item name="android:layout_marginEnd">@dimen/dp_5</item>
+        <item name="android:text">@string/dot</item>
+    </style>
+    <!-- Tag text -->
+    <style name="text.tag.selected" parent="text">
+        <item name="android:textColor">@color/accent</item>
+    </style>
+    <style name="text.tag.normal" parent="text">
+        <item name="android:textColor">@color/def_text_light_x</item>
+    </style>
+    <!--  setInput  -->
+<!--    <style name="text.10.setInput">-->
+<!--        <item name="android:layout_width">wrap_content</item>-->
+<!--        <item name="android:layout_height">@dimen/dp_18</item>-->
+<!--        <item name="android:background">@drawable/bg_gradient_border_button_selected</item>-->
+<!--        <item name="android:paddingStart">@dimen/dp_10</item>-->
+<!--        <item name="android:paddingEnd">@dimen/dp_10</item>-->
+<!--        <item name="android:layout_marginTop">@dimen/dp_10</item>-->
+<!--    </style>-->
+
+  <!--  Btn  -->
+    <style name="btn">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+    <style name="btn.borderGradient">
+        <item name="android:background">@drawable/bg_gradient_border_button_selected</item>
+    </style>
+    <style name="btn.setInput">
+        <item name="android:layout_width">@dimen/dp_30</item>
+        <item name="android:backgroundTint">@color/trans</item>
+        <item name="android:src">@drawable/ic_auto_awesome_24</item>
+    </style>
+
+  <!-- Tag Style -->
+    <style name="tag">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">@dimen/dp_6</item>
+        <item name="android:paddingTop">@dimen/dp_4</item>
+        <item name="android:paddingBottom">@dimen/dp_4</item>
+        <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:paddingEnd">@dimen/dp_10</item>
+    </style>
+    <style name="tag.selected">
+        <item name="android:background">@drawable/bg_gradient_border_button_selected</item>
+    </style>
+    <style name="tag.normal">
+        <item name="android:background">@drawable/bg_gradient_border_button_normal</item>
+    </style>
+
+<!--  textInputLayout   -->
+    <style name="textInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_Light">#D9CBFB</color>
+    <color name="primary">#AD8DFC</color>
+    <color name="primary_dark">#FF6D30FF</color>
+    <color name="primary_2_Light">#FCF8DC</color>
+    <color name="primary_2_color">#F8EA6E</color>
+    <color name="primary_2_dark">#B6A400</color>
+    <color name="accent">#6D30FF</color>
+    <color name="status_bar">#FFFFFF</color>
+    <color name="def_bg">#FFFFFF</color>
+    <color name="def_text">#302E2E</color>
+    <color name="def_text_light">#C1202020</color>
+    <color name="def_text_light_x">#92202020</color>
+    <color name="music_waves_bg">#6A000000</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="trans">#00FFFFFF</color>
+    <color name="trans_dark">#1D000000</color>
+    <color name="trans_dark_x">#4A000000</color>
+    <color name="bg_blur">#70FAFAFA</color>
+    <color name="bg_blur_x">#C6FAFAFA</color>
+</resources>

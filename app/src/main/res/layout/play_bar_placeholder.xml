@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.example.amplaybyalmamun.custom_views.TouchableView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playBar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:orientation="vertical"
+    android:background="@color/def_bg">
+
+    <SeekBar
+        android:id="@+id/playBar_seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:progress="0"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:thumb="@android:color/transparent"
+        android:splitTrack="false"
+        android:layout_margin="0dp"
+        android:layout_gravity="center_horizontal"/>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/dp_3"
+        android:paddingBottom="@dimen/dp_3">
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/playBar_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/dp_5">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/playBar_iv_albumArt"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:scaleType="centerCrop"
+                android:background="@color/trans_dark_x"/>
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_10"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/text.16"
+                    android:layout_width="@dimen/dp_150"
+                    android:background="@color/trans_dark_x" />
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/playBar_tv_liveDuration"
+                        style="@style/text.light.13"
+                        android:background="@color/trans_dark_x"
+                        android:textColor="@color/trans"
+                        android:text="@string/duration"/>
+                    <TextView
+                        style="@style/text.dot.16"
+                        android:textColor="@color/trans"
+                        android:background="@color/trans_dark_x"/>
+                    <TextView
+                        android:id="@+id/playBar_tv_artist"
+                        android:layout_width="@dimen/dp_102"
+                        style="@style/text"
+                        android:background="@color/trans_dark_x"/>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/playBar_btn_next"
+                style="@style/icon"
+                android:background="@color/trans_dark_x"
+                android:layout_marginEnd="@dimen/dp_10"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/playBar_btn_playPause"
+                style="@style/icon"
+                android:background="@color/trans_dark_x" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</com.example.amplaybyalmamun.custom_views.TouchableView>
