@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.example.amplaybyalmamun.gadgets.utils.Store;
 import com.example.amplaybyalmamun.process.AppSettings;
@@ -226,6 +227,7 @@ public class PlayAudio extends AppCompatActivity {
         btnEditMetadata.setOnClickListener(v -> {
             MyUtils.setOnClickAnim(v);
             startEditMetadataActivity();
+//            showPopupMenu(v);
         });
         // by tv_title area
         findViewById(R.id.titleArtist_area).setOnClickListener(v -> startEditMetadataActivity());
@@ -286,5 +288,23 @@ public class PlayAudio extends AppCompatActivity {
         Intent i = new Intent(PlayAudio.this, EditAudioMetadata.class);
         i.putExtra(Keys.POSITION, MyUtils.getIndex(Store.AUDIO_FILES, playing_queue.get(position)));
         PlayAudio.this.startActivity(i);
+    }
+
+    private void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenuInflater().inflate(R.menu.play_audio_dropdown, popupMenu.getMenu());
+//        popupMenu.setOnMenuItemClickListener(item -> {
+//            switch (item.getItemId()) {
+//                case R.id.edit_metadata:
+//                    Toast.makeText(PlayAudio.this, "Action 1 clicked", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                case R.id.delete_file:
+//                    Toast.makeText(PlayAudio.this, "Action 2 clicked", Toast.LENGTH_SHORT).show();
+//                    return true;
+//                default:
+//                    return false;
+//            }
+//        });
+        popupMenu.show();
     }
 }

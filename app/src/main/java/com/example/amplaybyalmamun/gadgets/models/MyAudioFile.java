@@ -300,6 +300,11 @@ public class MyAudioFile {
     }
 
 
+    // get file object
+    public File getFile() {
+        return new File(getPath());
+    }
+
     // unique id
     public String getUniqueId() {
         return filePath + size + duration;

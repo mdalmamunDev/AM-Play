@@ -3,6 +3,7 @@ package com.example.amplaybyalmamun.gadgets.utils;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -44,6 +45,19 @@ public class MyUtils {
                     // Scan completed callback, you can handle any post-scan actions here
                 });
 
+    }
+    // delete file
+    public static boolean delete(File file) {
+        if (!file.exists()) return false;
+
+        boolean deleted = file.delete();
+        if (deleted) {
+            Log.d("FileDelete", "File deleted successfully");
+        } else {
+            Log.d("FileDelete", "File deletion failed");
+        }
+
+        return deleted;
     }
 /* files  ends */
 
