@@ -3,6 +3,7 @@ package com.example.amplaybyalmamun;
 import android.app.Dialog;
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -16,6 +17,8 @@ import androidx.appcompat.widget.SwitchCompat;
 import com.example.amplaybyalmamun.R;
 import com.example.amplaybyalmamun.process.AppSettings;
 import com.example.amplaybyalmamun.threads.Thread_ResetAllAmTags;
+
+import java.io.IOException;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -107,6 +110,17 @@ public class SettingsActivity extends AppCompatActivity {
 
         // back
         findViewById(R.id.btnBack).setOnClickListener(v -> onBackPressed());
+
+
+        // temp codes
+        try {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource("https://drive.google.com/uc?export=download&id=18rcIeuttHKjRF1MKOg3hfJ0mDGj3fcx1"); //https://drive.google.com/uc?export=download&id=18rcIeuttHKjRF1MKOg3hfJ0mDGj3fcx1
+            mediaPlayer.prepare(); // Use prepareAsync() for asynchronous preparation
+            mediaPlayer.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // override on back pressed method
