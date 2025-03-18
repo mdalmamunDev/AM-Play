@@ -3,6 +3,8 @@
 ## Overview
 **AM Play** is a feature-rich and interactive Android music player app designed to provide users with the ultimate music experience. With cutting-edge features and a sleek, glassy UI, AM Play stands out as the go-to choice for music enthusiasts.
 
+<img src="overview.png" alt="Screenshot" width="">
+
 ---
 
 ## Version Information
