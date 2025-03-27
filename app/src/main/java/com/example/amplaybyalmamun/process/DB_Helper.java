@@ -19,11 +19,42 @@ public class DB_Helper extends SQLiteOpenHelper {
     private static final String CL_ID = "_id"; // CL == COLUMN
     private static final String CL_ID_FILE = "id_file";
     private static final String CL_PATH = "path";
+    private static final String CL_TITLE = "title";
+    private static final String CL_ALBUM = "album";
+    private static final String CL_ARTISTS = "artists";
+    private static final String CL_ALBUM_ARTIST = "album_artist";
+    private static final String CL_GENRE = "genre";
+    private static final String CL_YEAR = "year";
+    private static final String CL_DATE = "date";
+    private static final String CL_TRACK = "track";
+    private static final String CL_AM_TAGS = "am_tags";
     private static final String CL_DURATION = "duration";
     private static final String CL_SIZE = "size";
+    private static final String CL_BIT_RATE = "bit_rate";
     private static final String CL_MIME_TYPE = "mime_type";
 
 
+
+    // table audio history
+    public static final String TABLE_AUDIOS = "audios"; // AH == AUDIO HISTORY
+    private static final String TABLE_CREATE_AUDIOS =
+            "CREATE TABLE " + TABLE_AUDIOS + " (" +
+                    CL_ID + " INTEGER PRIMARY KEY, " +
+                    CL_ID_FILE + " INTEGER, " +
+                    CL_PATH + " TEXT, " +
+                    CL_TITLE + " TEXT, " +
+                    CL_ALBUM + " TEXT, " +
+                    CL_ARTISTS + " TEXT, " +
+                    CL_ALBUM_ARTIST + " TEXT, " +
+                    CL_GENRE + " TEXT, " +
+                    CL_YEAR + " INTEGER, " +
+                    CL_DATE + " TEXT, " +
+                    CL_TRACK + " INTEGER, " +
+                    CL_AM_TAGS + " TEXT, " +
+                    CL_DURATION + " INTEGER, " +
+                    CL_SIZE + " INTEGER, " +
+                    CL_BIT_RATE + " TEXT, " +
+                    CL_MIME_TYPE + " TEXT)";
 
     // table audio history
     public static final String TABLE_AUDIO_HISTORY = "audio_history"; // AH == AUDIO HISTORY
@@ -60,45 +91,53 @@ public class DB_Helper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(TABLE_CREATE_AUDIOS);
         db.execSQL(TABLE_CREATE_AH);
         db.execSQL(TABLE_CREATE_FAV);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIOS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_AUDIO_HISTORY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FAVORITES);
         onCreate(db);
+    }
+
+    private ContentValues getContentValues(MyAudioFile file) {
+        ContentValues values = new ContentValues();
+
+        values.put(CL_ID_FILE, file.getIdFile());
+        values.put(CL_PATH, file.getPath());
+        values.put(CL_TITLE, file.getTitle());
+        values.put(CL_ALBUM, file.getAlbum());
+        values.put(CL_ARTISTS, file.getArtists());
+        values.put(CL_ALBUM_ARTIST, file.getAlbumArtist());
+        values.put(CL_GENRE, file.getGenre());
+        values.put(CL_YEAR, file.getYear());
+        values.put(CL_DATE, file.getDate());
+        values.put(CL_TRACK, file.getTrack());
+        values.put(CL_AM_TAGS, file.getAmTags());
+        values.put(CL_DURATION, file.getDuration());
+        values.put(CL_SIZE, file.getSize());
+        values.put(CL_BIT_RATE, file.getBitRate());
+        values.put(CL_MIME_TYPE, file.getMimeType());
+
+        return values;
     }
 
     // Add a new audio item to the database
     public void addAudioItem(String table, MyAudioFile bundle) {
         if (bundle == null || table.isEmpty()) return;
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(CL_ID_FILE,      bundle.getIdFile());
-        values.put(CL_PATH,         bundle.getPath());
-        values.put(CL_DURATION,     bundle.getDuration());
-        values.put(CL_SIZE,         bundle.getSize());
-        values.put(CL_MIME_TYPE,    bundle.getMimeType());
-
-        db.insert(table, null, values);
-        //db.close();
+        db.insert(table, null, getContentValues(bundle));
+        db.close();
     }
 
     // Update an existing audio item in the database
     public void updateAudioItem(String table, int id, MyAudioFile bundle) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(CL_ID_FILE,      bundle.getIdFile());
-        values.put(CL_PATH,         bundle.getPath());
-        values.put(CL_DURATION,     bundle.getDuration());
-        values.put(CL_SIZE,         bundle.getSize());
-        values.put(CL_MIME_TYPE,    bundle.getMimeType());
-
-        db.update(table, values, CL_ID + " = ?", new String[]{String.valueOf(id)});
+        db.update(table, getContentValues(bundle), CL_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
     }
 
