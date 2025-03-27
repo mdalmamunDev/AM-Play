@@ -54,10 +54,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
         // reset data and onclick listener using thread
         new Thread_SetMDOnRecycler(context, holder, listFiles, position).start();
         // Apply animation to the view holder here
-        if (position > Store.maxVisited) {
-            MyUtils.loadAnimation(holder.itemView, R.anim.anim_recycler_item);
-            Store.maxVisited = position;
-        }
+//        if (position > Store.maxVisited) {
+//            MyUtils.loadAnimation(holder.itemView, R.anim.anim_recycler_item);
+//            Store.maxVisited = position;
+//        }
     }
 
     @Override

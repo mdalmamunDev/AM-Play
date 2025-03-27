@@ -92,16 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // access audios
-        try {
-            if (!checkPermissions()) {
-                requestPermissions();
-            } else {
-                // MyUtils.accessAudioFiles(this);
-                AUDIO_FILES = new ArrayList<>();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        requestPermissions();
 
         // load views
         new Loader().start();
@@ -148,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
             settings.prepare();
 
             // access files
-            new AccessAudioFiles(context).accessAudioFiles();
+            //new AccessAudioFiles(context).accessAudioFiles();
 
         /* prepare group lists ends */
 
@@ -252,22 +243,27 @@ private void assignItems() {
 
     /* take permissions */
     private void requestPermissions() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            try {
-                Intent intent = new Intent();
-                intent.setAction(ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                Uri uri = Uri.fromParts("package", this.getPackageName(), null);
-                intent.setData(uri);
-                storageActivityResultLauncher.launch(intent);
-            } catch (Exception e) {
-                Log.e("Permission E", "requestPermissions: ", e);
-                Intent intent = new Intent();
-                intent.setAction(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                storageActivityResultLauncher.launch(intent);
+        if (checkPermissions()) return;
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    Uri uri = Uri.fromParts("package", this.getPackageName(), null);
+                    intent.setData(uri);
+                    storageActivityResultLauncher.launch(intent);
+                } catch (Exception e) {
+                    Log.e("Permission E", "requestPermissions: ", e);
+                    Intent intent = new Intent();
+                    intent.setAction(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    storageActivityResultLauncher.launch(intent);
+                }
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
             }
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_CODE_PERMISSION);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

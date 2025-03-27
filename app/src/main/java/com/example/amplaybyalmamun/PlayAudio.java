@@ -6,6 +6,7 @@ import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -81,6 +82,8 @@ public class PlayAudio extends AppCompatActivity {
                     position = MyUtils.getLatPlayedIdx(this, playing_queue);
             else    position = intent.getIntExtra(Keys.POSITION, -1);
         }
+
+        Log.d("4444", "onCreate: " + playing_queue.size());
 
 
         // assign items
@@ -233,7 +236,7 @@ public class PlayAudio extends AppCompatActivity {
         findViewById(R.id.titleArtist_area).setOnClickListener(v -> startEditMetadataActivity());
 
 
-        dbHelper.close();
+//        dbHelper.close();
     }
     /*****  onCreate end *****/
 
@@ -268,7 +271,7 @@ public class PlayAudio extends AppCompatActivity {
         repeatStatus        = settings.getRepeatStatus();
 
         // others
-        file                = playing_queue.get(position);
+        file                = !playing_queue.isEmpty() ? playing_queue.get(position) : null;
         dbHelper            = new DB_Helper(this);
         isFav               = file.isFavorite();
     }

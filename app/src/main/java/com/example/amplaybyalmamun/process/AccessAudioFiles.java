@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
@@ -88,16 +89,16 @@ public class AccessAudioFiles {
             int cl_bitRate = cursor.getColumnIndex(MyAudioColumns.BITRATE);
 
             try {
+                DB_Helper dbHelper = new DB_Helper(this.context);
+                dbHelper.clearTable(DB_Helper.TABLE_AUDIOS);
+
                 while (cursor.moveToNext()) {
                     MyAudioFile file = new MyAudioFile();
 
                     // get data
                     file.setPath((cl_path != -1) ? cursor.getString(cl_path) : "");
-                    // Check if the file path is valid and the file exists
-                    if (!file.exists()) {
-                        // Skip this entry as the file is not accessible
-                        continue;
-                    }
+                    if (!file.exists()) continue; // Skip this entry as the file is not accessible
+
                     file.setIdFile((cl_id > -1) ? cursor.getInt(cl_id) : -1);
                     file.setTitle((cl_title > -1) ? cursor.getString(cl_title) : "");
                     file.setAlbum((cl_album > -1) ? cursor.getString(cl_album) : "");
@@ -111,9 +112,14 @@ public class AccessAudioFiles {
                     file.setSize((cl_size != -1) ? cursor.getLong(cl_size) : -1);
                     file.setBitRate((cl_bitRate != -1) ? cursor.getInt(cl_track) : -1);
 
-                    if (file.isAudio()) Store.AUDIO_FILES.add(file);
+                    if (file.isAudio()) {
+                        file.prepare(this.context);
+                        dbHelper.addAudioItem(DB_Helper.TABLE_AUDIOS, file);
+                    }
+
+//                    if (file.isAudio()) Store.AUDIO_FILES.add(file);
                     // check
-                    //System.out.println("AccessAudioFiles, path: " + file.getPath());
+                    // System.out.println("AccessAudioFiles, path: " + file.getPath());
 
                 }
             } catch (Exception e) {

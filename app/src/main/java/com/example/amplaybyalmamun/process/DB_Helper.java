@@ -47,7 +47,7 @@ public class DB_Helper extends SQLiteOpenHelper {
                     CL_ARTISTS + " TEXT, " +
                     CL_ALBUM_ARTIST + " TEXT, " +
                     CL_GENRE + " TEXT, " +
-                    CL_YEAR + " INTEGER, " +
+                    CL_YEAR + " TEXT, " +
                     CL_DATE + " TEXT, " +
                     CL_TRACK + " INTEGER, " +
                     CL_AM_TAGS + " TEXT, " +
@@ -104,24 +104,38 @@ public class DB_Helper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    private ContentValues getContentValues(MyAudioFile file) {
+    public void dropTable(String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + tableName);
+    }
+
+    public void clearTable(String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + tableName);
+        db.execSQL("VACUUM"); // Reclaims unused space and resets AUTOINCREMENT
+    }
+
+    private ContentValues getContentValues(String table, MyAudioFile file) {
         ContentValues values = new ContentValues();
 
         values.put(CL_ID_FILE, file.getIdFile());
         values.put(CL_PATH, file.getPath());
-        values.put(CL_TITLE, file.getTitle());
-        values.put(CL_ALBUM, file.getAlbum());
-        values.put(CL_ARTISTS, file.getArtists());
-        values.put(CL_ALBUM_ARTIST, file.getAlbumArtist());
-        values.put(CL_GENRE, file.getGenre());
-        values.put(CL_YEAR, file.getYear());
-        values.put(CL_DATE, file.getDate());
-        values.put(CL_TRACK, file.getTrack());
-        values.put(CL_AM_TAGS, file.getAmTags());
         values.put(CL_DURATION, file.getDuration());
         values.put(CL_SIZE, file.getSize());
-        values.put(CL_BIT_RATE, file.getBitRate());
         values.put(CL_MIME_TYPE, file.getMimeType());
+
+        if (table.equals(TABLE_AUDIOS)) {
+            values.put(CL_TITLE, file.getTitle());
+            values.put(CL_ALBUM, file.getAlbum());
+            values.put(CL_ARTISTS, file.getArtists());
+            values.put(CL_ALBUM_ARTIST, file.getAlbumArtist());
+            values.put(CL_GENRE, file.getGenre());
+            values.put(CL_YEAR, file.getYear());
+            values.put(CL_DATE, file.getDate());
+            values.put(CL_TRACK, file.getTrack());
+            values.put(CL_AM_TAGS, file.getAmTags());
+            values.put(CL_BIT_RATE, file.getBitRate());
+        }
 
         return values;
     }
@@ -130,15 +144,15 @@ public class DB_Helper extends SQLiteOpenHelper {
     public void addAudioItem(String table, MyAudioFile bundle) {
         if (bundle == null || table.isEmpty()) return;
         SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(table, null, getContentValues(bundle));
-        db.close();
+        db.insert(table, null, getContentValues(table, bundle));
+        //db.close();
     }
 
     // Update an existing audio item in the database
     public void updateAudioItem(String table, int id, MyAudioFile bundle) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.update(table, getContentValues(bundle), CL_ID + " = ?", new String[]{String.valueOf(id)});
-        db.close();
+        db.update(table, getContentValues(table, bundle), CL_ID + " = ?", new String[]{String.valueOf(id)});
+        //db.close();
     }
 
     // Retrieve all audio items from the database
@@ -268,7 +282,7 @@ public class DB_Helper extends SQLiteOpenHelper {
     public void deleteAudioItem( String table, int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(table, CL_ID + " = ?", new String[]{String.valueOf(id)});
-        db.close();
+        //db.close();
     }
 }
 

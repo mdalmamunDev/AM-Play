@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.amplaybyalmamun.MainActivity;
 import com.example.amplaybyalmamun.R;
 import com.example.amplaybyalmamun.adaptes.RecyclerAdapter;
+import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
 import com.example.amplaybyalmamun.gadgets.models.TagBarItems;
 import com.example.amplaybyalmamun.gadgets.utils.Store;
+import com.example.amplaybyalmamun.process.DB_Helper;
 import com.example.amplaybyalmamun.process.Search;
 import com.example.amplaybyalmamun.threads.TagBarLoader;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -69,7 +71,10 @@ public class FragSongs extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         // Check if the context is not null before creating the adapter
         if (getContext() != null) {
-            adapter = new RecyclerAdapter(getContext(), Store.AUDIO_FILES);
+            DB_Helper dbHelper = new DB_Helper(getContext());
+            List<MyAudioFile> audios = dbHelper.getAllAudioItems(DB_Helper.TABLE_AUDIOS);
+            dbHelper.close();
+            adapter = new RecyclerAdapter(getContext(), audios);
             recyclerView.setAdapter(adapter);
         }
         // Add scroll listener to RecyclerView
