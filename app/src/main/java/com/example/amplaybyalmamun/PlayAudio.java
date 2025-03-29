@@ -1,8 +1,11 @@
 package com.example.amplaybyalmamun;
 
 
+import static com.example.amplaybyalmamun.gadgets.utils.Store.AUDIO_FILES;
 import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,7 +38,6 @@ public class PlayAudio extends AppCompatActivity {
 
     MyAudioFile file;
     MyMediaPlayer audioPlayer;
-    DB_Helper dbHelper;
     AppSettings settings;
     boolean isFav, shuffleStatus;
     int repeatStatus;
@@ -54,7 +56,7 @@ public class PlayAudio extends AppCompatActivity {
     private final Handler handler = new Handler();
     AppCompatImageView iv_albumArt;
     TextView tv_PlayingFrom, tv_title, tv_artists, tv_liveDuration, tv_duration;
-    AppCompatImageButton btnBack, btnFavorite, btnRepeat, btnPlayPause, btnPrev, btnNext, btnShuffle, btnEditMetadata;
+    AppCompatImageButton btnBack, btnFavorite, btnRepeat, btnPlayPause, btnPrev, btnNext, btnShuffle, btnEditMetadata, btnAddToPlaylist;
     LinearLayoutCompat tagsField;
     public static int position;
     int totalAudios;
@@ -233,7 +235,25 @@ public class PlayAudio extends AppCompatActivity {
         findViewById(R.id.titleArtist_area).setOnClickListener(v -> startEditMetadataActivity());
 
 
-        dbHelper.close();
+        // delete
+        btnAddToPlaylist.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete")
+                    .setMessage("Are you sure you want to delete this file?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        if (file.delete()) {
+                            Toast.makeText(PlayAudio.this, "Deleted", Toast.LENGTH_SHORT).show();
+                            AUDIO_FILES.remove(position);
+                            btnNext.callOnClick();
+                        } else {
+                            Toast.makeText(PlayAudio.this, "Error deleting file", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        });
+
+
     }
     /*****  onCreate end *****/
 
@@ -257,6 +277,7 @@ public class PlayAudio extends AppCompatActivity {
         btnNext             = findViewById(R.id.btnNext);
         btnShuffle          = findViewById(R.id.btnShuffle);
         btnEditMetadata     = findViewById(R.id.btnEditMetadata);
+        btnAddToPlaylist    = findViewById(R.id.btn_addToPlaylist);
         seekBar             = findViewById(R.id.seekBar);
         tv_liveDuration     = findViewById(R.id.textView_liveDuration);
         tv_duration         = findViewById(R.id.playBar_tv_duration);
@@ -269,7 +290,6 @@ public class PlayAudio extends AppCompatActivity {
 
         // others
         file                = playing_queue.get(position);
-        dbHelper            = new DB_Helper(this);
         isFav               = file.isFavorite();
     }
     private void setData() {

@@ -395,4 +395,13 @@ public class MyAudioFile {
                 fileExtension.equalsIgnoreCase("flac") ||
                 fileExtension.equalsIgnoreCase("wav");
     }
+
+
+    public boolean delete() {
+        if (exists()) {
+            File file = new File(getPath());
+            return file.delete(); // Deletes the file and returns true if successful
+        }
+        return false; // File does not exist or could not be deleted
+    }
 }
