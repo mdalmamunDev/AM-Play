@@ -44,8 +44,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<ViewHolder> {
         MyAudioFile file = listFiles.get(position);
         holder.ivAlbumArt.setImageResource(R.drawable.img_def_album_art);
         holder.tvTitle.setText(file.getTitle());
-        holder.tvAlbum.setText(!file.getAlbum().equals("") ? file.getAlbum() : "<empty>");
-        holder.tvArtist.setText(!file.getArtists().equals("") ? file.getArtists() : "<empty>");
+        holder.tvAlbum.setText(!file.getAlbum().isEmpty() ? file.getAlbum() : "<empty>");
+        holder.tvArtist.setText(!file.getArtists().isEmpty() ? file.getArtists() : "<empty>");
         holder.tvDuration.setText(file.getDurationInTime());
 
         // set color

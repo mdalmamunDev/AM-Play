@@ -49,7 +49,7 @@ public class DB_Helper extends SQLiteOpenHelper {
                     CL_GENRE + " TEXT, " +
                     CL_YEAR + " TEXT, " +
                     CL_DATE + " TEXT, " +
-                    CL_TRACK + " INTEGER, " +
+                    CL_TRACK + " TEXT, " +
                     CL_AM_TAGS + " TEXT, " +
                     CL_DURATION + " INTEGER, " +
                     CL_SIZE + " INTEGER, " +
@@ -202,6 +202,52 @@ public class DB_Helper extends SQLiteOpenHelper {
 
         return audioItemList;
     }
+
+    public MyAudioFile getAudioItem(String table, int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(
+                table,                 // Table name
+                null,                  // Select all columns
+                CL_ID + " = ?",        // WHERE clause
+                new String[]{String.valueOf(id)}, // Arguments
+                null, null, null
+        );
+
+        MyAudioFile audioFile = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            audioFile = new MyAudioFile();
+
+            // Always set common columns
+            audioFile.setIdDB(cursor.getInt(cursor.getColumnIndexOrThrow(CL_ID)));
+            audioFile.setIdFile(cursor.getLong(cursor.getColumnIndexOrThrow(CL_ID_FILE)));
+            audioFile.setPath(cursor.getString(cursor.getColumnIndexOrThrow(CL_PATH)));
+            audioFile.setDuration(cursor.getLong(cursor.getColumnIndexOrThrow(CL_DURATION)));
+            audioFile.setSize(cursor.getLong(cursor.getColumnIndexOrThrow(CL_SIZE)));
+            audioFile.setMimeType(cursor.getString(cursor.getColumnIndexOrThrow(CL_MIME_TYPE)));
+
+            // Set all columns only if the table is "audios"
+            if (table.equals(TABLE_AUDIOS)) {
+                audioFile.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(CL_TITLE)));
+                audioFile.setAlbum(cursor.getString(cursor.getColumnIndexOrThrow(CL_ALBUM)));
+                audioFile.setArtists(cursor.getString(cursor.getColumnIndexOrThrow(CL_ARTISTS)));
+                audioFile.setAlbumArtist(cursor.getString(cursor.getColumnIndexOrThrow(CL_ALBUM_ARTIST)));
+                audioFile.setGenre(cursor.getString(cursor.getColumnIndexOrThrow(CL_GENRE)));
+                audioFile.setYear(cursor.getString(cursor.getColumnIndexOrThrow(CL_YEAR)));
+                audioFile.setDate(cursor.getString(cursor.getColumnIndexOrThrow(CL_DATE)));
+                audioFile.setTrack(cursor.getString(cursor.getColumnIndexOrThrow(CL_TRACK)));
+                audioFile.setAmTags(cursor.getString(cursor.getColumnIndexOrThrow(CL_AM_TAGS)));
+                audioFile.setBitRate(cursor.getString(cursor.getColumnIndexOrThrow(CL_BIT_RATE)));
+            }
+
+            cursor.close();
+        }
+
+        db.close();
+        return audioFile;
+    }
+
+
     public MyAudioFile getAudioItem(String table, MyAudioFile file) {
         if (file == null) return null;
 
@@ -283,6 +329,11 @@ public class DB_Helper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(table, CL_ID + " = ?", new String[]{String.valueOf(id)});
         //db.close();
+    }
+
+    @Override
+    public synchronized void close() {
+        // super.close();
     }
 }
 

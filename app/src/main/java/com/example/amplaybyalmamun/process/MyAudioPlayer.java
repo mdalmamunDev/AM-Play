@@ -311,7 +311,7 @@ public class MyAudioPlayer{
             if (groupActivity != null) groupActivity.notifyItemChanged(position);
             if (songsFrg != null) songsFrg.notifyItemChanged(position);
 
-            PlayAudio.position = position;
+//            PlayAudio.position = position;
         }
     }
 

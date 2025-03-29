@@ -110,14 +110,13 @@ public class AccessAudioFiles {
                     file.setDuration((cl_duration != -1) ? cursor.getLong(cl_duration) : -1);
                     file.setMimeType((cl_mimeType != -1) ? cursor.getString(cl_mimeType) : "");
                     file.setSize((cl_size != -1) ? cursor.getLong(cl_size) : -1);
-                    file.setBitRate((cl_bitRate != -1) ? cursor.getInt(cl_track) : -1);
+                    file.setBitRate((cl_bitRate != -1) ? cursor.getString(cl_bitRate) : "");
 
                     if (file.isAudio()) {
                         file.prepare(this.context);
                         dbHelper.addAudioItem(DB_Helper.TABLE_AUDIOS, file);
                     }
 
-//                    if (file.isAudio()) Store.AUDIO_FILES.add(file);
                     // check
                     // System.out.println("AccessAudioFiles, path: " + file.getPath());
 

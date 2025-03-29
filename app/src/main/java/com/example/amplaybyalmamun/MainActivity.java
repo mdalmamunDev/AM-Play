@@ -55,7 +55,7 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("StaticFieldLeak")
-    private  static MainActivity instance;
+    private static MainActivity instance;
     private static final int REQUEST_CODE_PERMISSION = 1;
 
 
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         // play bar
         playBar_left.setOnClickListener(v -> {
-            if(MyAudioPlayer.prevPlayer == null) return;
+            if (MyAudioPlayer.prevPlayer == null) return;
 
             // assigning listFile of PlayAudio before start activity
             if (playing_queue == null || playing_queue.size() == 0)
@@ -138,10 +138,6 @@ public class MainActivity extends AppCompatActivity {
             AppSettings settings = new AppSettings(context);
             settings.prepare();
 
-            // access files
-            //new AccessAudioFiles(context).accessAudioFiles();
-
-        /* prepare group lists ends */
 
             runOnUiThread(() -> {
                 // set tab layout
@@ -166,79 +162,79 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-            /* Play Bar */
-                // set list view
-                // blur bg
-                PlayAudio.setBg_blur.add(findViewById(R.id.blurBg_playBar));
-                // play pause btn
-                PlayAudio.setBtn_playPause.add(playBar_btn_playPause);
-                // next btn
-                PlayAudio.setBtn_next.add(playBar_btn_next);
-                // touchable view
-                PlayAudio.set_touchableView.add(playBar);
-                // album art
-                PlayAudio.setTv_albumArt.add(playBar_iv_albumArt);
-                // title
-                PlayAudio.setTv_title.add(playBar_tv_title);
-                // artist
-                PlayAudio.setTv_artist.add(playBar_tv_artist);
-                // live duration
-                PlayAudio.setTv_liveDuration.add(playBar_tv_liveDuration);
-                // seek bar
-                PlayAudio.setSeekBar.add(playBar_seekBar);
-                // set media player
-                HashMap<MyViews, Set<View>> viewMap = new HashMap<>();
-                    viewMap.put(MyViews.BG_BLUR,            PlayAudio.setBg_blur);
-                    viewMap.put(MyViews.TOUCHABLE_VIEW,     PlayAudio.set_touchableView);
-                    viewMap.put(MyViews.BTN_PLAY_PAUSE,     PlayAudio.setBtn_playPause);
-                    viewMap.put(MyViews.BTN_NEXT,           PlayAudio.setBtn_next);
-                    viewMap.put(MyViews.IV_ALBUM_ART,       PlayAudio.setTv_albumArt);
-                    viewMap.put(MyViews.TV_TITLE,           PlayAudio.setTv_title);
-                    viewMap.put(MyViews.TV_ARTISTS,         PlayAudio.setTv_artist);
-                    viewMap.put(MyViews.TV_LIVE_DURATION,   PlayAudio.setTv_liveDuration);
-                    viewMap.put(MyViews.SEEK_BAR,           PlayAudio.setSeekBar);
+                /* Play Bar */
+//                // set list view
+//                // blur bg
+//                PlayAudio.setBg_blur.add(findViewById(R.id.blurBg_playBar));
+//                // play pause btn
+//                PlayAudio.setBtn_playPause.add(playBar_btn_playPause);
+//                // next btn
+//                PlayAudio.setBtn_next.add(playBar_btn_next);
+//                // touchable view
+//                PlayAudio.set_touchableView.add(playBar);
+//                // album art
+//                PlayAudio.setTv_albumArt.add(playBar_iv_albumArt);
+//                // title
+//                PlayAudio.setTv_title.add(playBar_tv_title);
+//                // artist
+//                PlayAudio.setTv_artist.add(playBar_tv_artist);
+//                // live duration
+//                PlayAudio.setTv_liveDuration.add(playBar_tv_liveDuration);
+//                // seek bar
+//                PlayAudio.setSeekBar.add(playBar_seekBar);
+//                // set media player
+//                HashMap<MyViews, Set<View>> viewMap = new HashMap<>();
+//                    viewMap.put(MyViews.BG_BLUR,            PlayAudio.setBg_blur);
+//                    viewMap.put(MyViews.TOUCHABLE_VIEW,     PlayAudio.set_touchableView);
+//                    viewMap.put(MyViews.BTN_PLAY_PAUSE,     PlayAudio.setBtn_playPause);
+//                    viewMap.put(MyViews.BTN_NEXT,           PlayAudio.setBtn_next);
+//                    viewMap.put(MyViews.IV_ALBUM_ART,       PlayAudio.setTv_albumArt);
+//                    viewMap.put(MyViews.TV_TITLE,           PlayAudio.setTv_title);
+//                    viewMap.put(MyViews.TV_ARTISTS,         PlayAudio.setTv_artist);
+//                    viewMap.put(MyViews.TV_LIVE_DURATION,   PlayAudio.setTv_liveDuration);
+//                    viewMap.put(MyViews.SEEK_BAR,           PlayAudio.setSeekBar);
+//
+//                MyMediaPlayer mediaPlayer = new MyMediaPlayer(context, AUDIO_FILES, PlayAudio.setBtn_playPause);
+//                MyAudioPlayer.position = getLatPlayedIdx(context, AUDIO_FILES);
+//                MyAudioPlayer.playFromPlayBar = true; // for pause first time
+//                MyAudioPlayer player = new MyAudioPlayer(context, AUDIO_FILES, mediaPlayer, viewMap);
+//
+//                // set Previous Player
+//                MyAudioPlayer.prevPlayer = player.getMyPlayer();
+//
+//                // set seekBar
+//                player.setSeekBars();
 
-                MyMediaPlayer mediaPlayer = new MyMediaPlayer(context, AUDIO_FILES, PlayAudio.setBtn_playPause);
-                MyAudioPlayer.position = getLatPlayedIdx(context, AUDIO_FILES);
-                MyAudioPlayer.playFromPlayBar = true; // for pause first time
-                MyAudioPlayer player = new MyAudioPlayer(context, AUDIO_FILES, mediaPlayer, viewMap);
-
-                // set Previous Player
-                MyAudioPlayer.prevPlayer = player.getMyPlayer();
-
-                // set seekBar
-                player.setSeekBars();
-
-            /* Play Bar End */
+                /* Play Bar End */
 
                 Store.maxVisited = 10;
 //                new Handler().postDelayed(() -> {
-                    main_placeholder.setVisibility(View.GONE);
-                    main_contents.setVisibility(View.VISIBLE);
+                main_placeholder.setVisibility(View.GONE);
+                main_contents.setVisibility(View.VISIBLE);
 //                }, 500);
 
             });
         }
     }
 
-private void assignItems() {
-        main_contents               = findViewById(R.id.main_contents);
-        main_placeholder            = findViewById(R.id.main_placeholder);
-       /* mainHeader                  = findViewById(R.id.main_header);*/
-        swipeRefreshLayout          = findViewById(R.id.swipe_refresh_layout);
-        tabLayout                   = findViewById(R.id.tabLay);
-        viewPager                   = findViewById(R.id.viewPager);
-        contentResolver             = getContentResolver();
+    private void assignItems() {
+        main_contents = findViewById(R.id.main_contents);
+        main_placeholder = findViewById(R.id.main_placeholder);
+        /* mainHeader                  = findViewById(R.id.main_header);*/
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
+        tabLayout = findViewById(R.id.tabLay);
+        viewPager = findViewById(R.id.viewPager);
+        contentResolver = getContentResolver();
         // Play bar items
-        playBar                     = findViewById(R.id.playBar);
-        playBar_left                = findViewById(R.id.playBar_left);
-        playBar_seekBar             = findViewById(R.id.playBar_seekBar);
-        playBar_iv_albumArt         = findViewById(R.id.playBar_iv_albumArt);
-        playBar_tv_title            = findViewById(R.id.tv_title);
-        playBar_tv_artist           = findViewById(R.id.playBar_tv_artist);
-        playBar_tv_liveDuration     = findViewById(R.id.playBar_tv_liveDuration);
-        playBar_btn_next            = findViewById(R.id.playBar_btn_next);
-        playBar_btn_playPause       = findViewById(R.id.playBar_btn_playPause);
+        playBar = findViewById(R.id.playBar);
+        playBar_left = findViewById(R.id.playBar_left);
+        playBar_seekBar = findViewById(R.id.playBar_seekBar);
+        playBar_iv_albumArt = findViewById(R.id.playBar_iv_albumArt);
+        playBar_tv_title = findViewById(R.id.tv_title);
+        playBar_tv_artist = findViewById(R.id.playBar_tv_artist);
+        playBar_tv_liveDuration = findViewById(R.id.playBar_tv_liveDuration);
+        playBar_btn_next = findViewById(R.id.playBar_btn_next);
+        playBar_btn_playPause = findViewById(R.id.playBar_btn_playPause);
     }
 
     /* take permissions */
@@ -267,29 +263,31 @@ private void assignItems() {
         }
 
     }
-    private final ActivityResultLauncher<Intent> storageActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    // handle the result of out intent
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                        if (Environment.isExternalStorageManager()) {
-                            // permission granted
 
-                            AUDIO_FILES = new ArrayList<>();
-                            ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), findViewById(R.id.main_search_view));
-                            viewPager.setAdapter(adapter);
-                            tabLayout.setupWithViewPager(viewPager);
-                        } /*else {
-                            // permission denied
-                        }*/
+    private final ActivityResultLauncher<Intent> storageActivityResultLauncher = registerForActivityResult(
+        new ActivityResultContracts.StartActivityForResult(),
+        new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult result) {
+                // handle the result of out intent
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        // permission granted
+
+                        AUDIO_FILES = new ArrayList<>();
+                        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), findViewById(R.id.main_search_view));
+                        viewPager.setAdapter(adapter);
+                        tabLayout.setupWithViewPager(viewPager);
                     } /*else {
-                        //
+                        // permission denied
                     }*/
-                }
+                } /*else {
+                    //
+                }*/
             }
+        }
     );
+
     // handle permissions
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -311,17 +309,17 @@ private void assignItems() {
             }*/
         }
     }
+
     // check permissions
     private boolean checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return Environment.isExternalStorageManager();
         } else {
             // below 11(R)
-            return  ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                     && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
     }
-
 
 
     public static MainActivity getInstance() {
@@ -332,6 +330,7 @@ private void assignItems() {
 //        mainHeader.setVisibility(View.GONE);
 //        playBar.setVisibility(View.VISIBLE);
     }
+
     public void setOnScrollDownViewVisibility() {
 //        mainHeader.setVisibility(View.VISIBLE);
 //        playBar.setVisibility(View.GONE);

@@ -12,35 +12,5 @@
         <TextView
             style="@style/tag.normal"
             android:text="@string/no_tags" />
-        <!--<TextView
-            style="@style/tag.selected"
-            android:text="Broken" />
-        <TextView
-            style="@style/tag.selected"
-            android:text="Heat" />
-        <TextView
-            style="@style/tag.selected"
-            android:text="Rain" />
-        <TextView
-            style="@style/tag.selected"
-            android:text="@string/tag" />
-        <TextView
-            style="@style/tag.selected"
-            android:text="@string/tag" />
-        <TextView
-            style="@style/tag.selected"
-            android:text="@string/tag" />
-        <TextView
-            style="@style/tag.selected"
-            android:text="@string/tag" />
-        <TextView
-            style="@style/tag.selected"
-            android:text="@string/tag" />
-        <TextView
-            style="@style/tag.selected"
-            android:text="@string/tag" />
-        <TextView
-            style="@style/tag.normal"
-            android:text="@string/tag"/>-->
     </androidx.appcompat.widget.LinearLayoutCompat>
 </HorizontalScrollView>

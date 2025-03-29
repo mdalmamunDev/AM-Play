@@ -41,7 +41,7 @@ public class MyAudioFile {
     private String amTags = ""; // custom
     private long duration = -1;
     private long size = -1;
-    private int bitRate = -1;
+    private String bitRate = "";
     private String mimeType = "";
     private boolean isPlaying = false;
     private boolean isFavorite = false;
@@ -70,7 +70,7 @@ public class MyAudioFile {
         this.amTags = (!other.amTags.isEmpty()) ? other.amTags : this.amTags;
         this.duration = (other.duration > -1) ? other.duration : this.duration;
         this.size = (other.size > -1) ? other.size : this.size;
-        this.bitRate = (other.bitRate > -1) ? other.bitRate : this.bitRate;
+        this.bitRate = (!other.bitRate.isEmpty()) ? other.bitRate : this.bitRate;
         this.mimeType = (!other.mimeType.isEmpty()) ? other.mimeType : this.mimeType;
         this.isPlaying = other.isPlaying;
         this.isFavorite = other.isFavorite;
@@ -181,7 +181,7 @@ public class MyAudioFile {
     }
 
     public String getGenreFirst(String genre) {
-        if (genre == null || genre.equals("")) return "";
+        if (genre == null || genre.isEmpty()) return "";
         String[] arr = genre.split(" ");
         if (arr.length > 1 && arr[1].equalsIgnoreCase("pop")) {
             return arr[0]+" "+arr[1];
@@ -257,10 +257,10 @@ public class MyAudioFile {
 
 
     // bit rate
-    public void setBitRate(int bitRate) {
+    public void setBitRate(String bitRate) {
         this.bitRate = bitRate;
     }
-    public int getBitRate() {
+    public String getBitRate() {
         return bitRate;
     }
 

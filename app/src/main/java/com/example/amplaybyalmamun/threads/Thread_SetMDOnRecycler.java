@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 
@@ -47,17 +48,17 @@ public class Thread_SetMDOnRecycler extends Thread {
         final List<String> tagList = audioFile.getTagsList();
         if (tagList != null)
             for (String tag : tagList)
-                if (tag != null && !tag.equals(""))
+                if (tag != null && !tag.isEmpty())
                     tags.append("#").append(tag).append(" ");
 
         // Update UI on the main thread
         holder.itemView.post(() -> {
             try {
                 holder.tvTitle.setText(title);
-                if (!album.equals("")) holder.tvAlbum.setText(album);
-                if (!artist.equals("")) holder.tvArtist.setText(artist);
+                if (!album.isEmpty()) holder.tvAlbum.setText(album);
+                if (!artist.isEmpty()) holder.tvArtist.setText(artist);
                 holder.tvDuration.setText(duration);
-                holder.tvTags.setText(!tags.toString().equals("") ? tags.toString() : "N/A");
+                holder.tvTags.setText(!tags.toString().isEmpty() ? tags.toString() : "N/A");
 
                 // set playing anim if playing
                 if (audioFile.isPlaying()) {
@@ -74,13 +75,15 @@ public class Thread_SetMDOnRecycler extends Thread {
 
                 // on click item
                 holder.itemCon.setOnClickListener(v -> {
-                    // set audioFiles of PlayAudio
-                    Store.playing_queue = this.listFiles;
-
                     // Launch PlayActivity and pass the audioFile
+                    MyAudioFile myAudioFile = listFiles.get(position);
+                    if (myAudioFile == null) {
+                        Toast.makeText(context, "Audio file is null", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     Intent intent = new Intent(context, PlayAudio.class);
-                    intent.putExtra(Keys.POSITION, position);
-                    intent.putExtra(Keys.TOTAL_AUDIOS, size);
+                    intent.putExtra(Keys.PATH, myAudioFile.getPath());
+                    intent.putExtra(Keys.ID_DB, myAudioFile.getIdDB());
                     context.startActivity(intent);
                 });
 
