@@ -67,4 +67,5 @@
     <string name="item_row_tags">N/A</string>
     <string name="edit_metadata">Edit Metadata</string>
     <string name="delete_file">Delete File</string>
+    <string name="add_playlist">Add Playlist</string>
 </resources>

@@ -9,6 +9,8 @@ import com.example.amplaybyalmamun.gadgets.utils.MyUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class GroupGetter {
 
@@ -25,6 +27,25 @@ public class GroupGetter {
         // add to store
         groupList.add(groupHistory);
         groupList.add(groupFavorites);
+
+
+//        List<String> playlistTitles = new ArrayList<>();
+        Map<String, List<MyAudioFile>> map = new HashMap<>();
+        List<MyAudioFile> othersPlaylistAudios = dbHelper.getAllAudioItems(DB_Helper.TABLE_AUDIO_PLAYLISTS);
+        for (MyAudioFile file : othersPlaylistAudios) {
+            if (map.containsKey(file.getPlaylist())){
+                Objects.requireNonNull(map.get(file.getPlaylist())).add(file);
+            } else {
+                List<MyAudioFile> list = new ArrayList<>();
+                list.add(file);
+                map.put(file.getPlaylist(), list);
+            }
+        }
+        for (Map.Entry<String, List<MyAudioFile>> entry : map.entrySet()) {
+            ItemGroup group = new ItemGroup(entry.getKey());
+            group.setListFiles(entry.getValue());
+            groupList.add(group);
+        }
 
         return groupList;
     }

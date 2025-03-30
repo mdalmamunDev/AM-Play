@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.FragPlayLists">
@@ -9,6 +10,19 @@
         android:id="@+id/group_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:visibility="gone"
+        android:id="@+id/group_btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add_to_playlist"
+        app:backgroundTint="@color/primary"
+        app:layout_anchorGravity="bottom|end"
+        android:contentDescription="@string/add_playlist"
+        android:elevation="6dp"
+        android:layout_gravity="bottom|end"/>
 
 </FrameLayout>
