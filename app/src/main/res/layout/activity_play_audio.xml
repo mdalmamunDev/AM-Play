@@ -71,12 +71,11 @@
                     android:text="@string/album_name" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-            <!-- Favorite -->
+            <!-- More Options -->
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/btnEditMetadata"
+                android:id="@+id/btnMoreOptions"
                 style="@style/icon"
-                android:src="@drawable/ic_edit" />
+                android:src="@drawable/ic_menu" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!-- Cover Photo -->

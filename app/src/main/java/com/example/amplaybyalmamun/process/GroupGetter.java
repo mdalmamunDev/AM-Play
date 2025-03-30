@@ -21,7 +21,7 @@ public class GroupGetter {
         groupHistory.setListFiles(dbHelper.getAllAudioItems(DB_Helper.TABLE_AUDIO_HISTORY));
         // playlist favorites
         ItemGroup groupFavorites = new ItemGroup("Favorites");
-        groupFavorites.setListFiles(dbHelper.getAllAudioItems(DB_Helper.TABLE_FAVORITES));
+        groupFavorites.setListFiles(dbHelper.getAllAudioItems(DB_Helper.TABLE_AUDIO_FAVORITES));
         // add to store
         groupList.add(groupHistory);
         groupList.add(groupFavorites);

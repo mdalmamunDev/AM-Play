@@ -113,7 +113,7 @@ public class MyAudioPlayer{
                     DB_Helper dbHelper = new DB_Helper(context);
 
                     if (file.isFavorite()){ // remove from favorite
-                        MyAudioFile favFile = dbHelper.getAudioItem(DB_Helper.TABLE_FAVORITES, file);
+                        MyAudioFile favFile = dbHelper.getAudioItem(DB_Helper.TABLE_AUDIO_FAVORITES, file);
 
                         if (favFile == null) { // check problem
                             MyUtils.showProblem(context);
@@ -121,12 +121,12 @@ public class MyAudioPlayer{
                         }
 
                         btnFavorite.setImageResource(R.drawable.ic_favorite_false);
-                        dbHelper.deleteAudioItem(DB_Helper.TABLE_FAVORITES, favFile.getIdDB());
+                        dbHelper.deleteAudioItem(DB_Helper.TABLE_AUDIO_FAVORITES, favFile.getIdDB());
                         file.setFavorite(false);
                         Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show();
                     } else { // add to favorite
                         btnFavorite.setImageResource(R.drawable.ic_favorite_true);
-                        dbHelper.addAudioItem(DB_Helper.TABLE_FAVORITES, listFiles.get(position));
+                        dbHelper.addAudioItem(DB_Helper.TABLE_AUDIO_FAVORITES, listFiles.get(position));
                         file.setFavorite(true);
                         Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
                     }

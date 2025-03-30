@@ -65,4 +65,6 @@
     <string name="date_release">Date Release</string>
     <string name="rank">99</string>
     <string name="item_row_tags">N/A</string>
+    <string name="edit_metadata">Edit Metadata</string>
+    <string name="delete_file">Delete File</string>
 </resources>

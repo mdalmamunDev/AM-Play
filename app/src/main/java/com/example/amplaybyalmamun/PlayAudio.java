@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -56,7 +58,7 @@ public class PlayAudio extends AppCompatActivity {
     private final Handler handler = new Handler();
     AppCompatImageView iv_albumArt;
     TextView tv_PlayingFrom, tv_title, tv_artists, tv_liveDuration, tv_duration;
-    AppCompatImageButton btnBack, btnFavorite, btnRepeat, btnPlayPause, btnPrev, btnNext, btnShuffle, btnEditMetadata, btnAddToPlaylist;
+    AppCompatImageButton btnBack, btnFavorite, btnRepeat, btnPlayPause, btnPrev, btnNext, btnShuffle, btnMoreOptions, btnAddToPlaylist;
     LinearLayoutCompat tagsField;
     public static int position;
     int totalAudios;
@@ -224,36 +226,41 @@ public class PlayAudio extends AppCompatActivity {
             finish();
         });
 
-    // edit metadata
-        // by btn
-        btnEditMetadata.setOnClickListener(v -> {
+    // more options
+        btnMoreOptions.setOnClickListener(v -> {
             MyUtils.setOnClickAnim(v);
-            startEditMetadataActivity();
-//            showPopupMenu(v);
+            PopupMenu popup = new PopupMenu(PlayAudio.this, v);
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.play_audio_dropdown, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.edit_md) { // edit md
+                    startEditMetadataActivity();
+                } else if (item.getItemId() == R.id.delete) { // delete
+                    new AlertDialog.Builder(this)
+                            .setTitle("Delete")
+                            .setMessage("Are you sure you want to delete this file?")
+                            .setPositiveButton("Yes", (dialog, which) -> {
+                                if (file.delete()) {
+                                    Toast.makeText(PlayAudio.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                    AUDIO_FILES.remove(position);
+                                    btnNext.callOnClick();
+                                } else {
+                                    Toast.makeText(PlayAudio.this, "Error deleting file", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+                }
+
+                return true;
+            });
+
+            popup.show();
         });
+
         // by tv_title area
         findViewById(R.id.titleArtist_area).setOnClickListener(v -> startEditMetadataActivity());
-
-
-        // delete
-        btnAddToPlaylist.setOnClickListener(v -> {
-            new AlertDialog.Builder(this)
-                    .setTitle("Delete")
-                    .setMessage("Are you sure you want to delete this file?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        if (file.delete()) {
-                            Toast.makeText(PlayAudio.this, "Deleted", Toast.LENGTH_SHORT).show();
-                            AUDIO_FILES.remove(position);
-                            btnNext.callOnClick();
-                        } else {
-                            Toast.makeText(PlayAudio.this, "Error deleting file", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
-        });
-
-
     }
     /*****  onCreate end *****/
 
@@ -276,7 +283,7 @@ public class PlayAudio extends AppCompatActivity {
         btnPrev             = findViewById(R.id.btnPrev);
         btnNext             = findViewById(R.id.btnNext);
         btnShuffle          = findViewById(R.id.btnShuffle);
-        btnEditMetadata     = findViewById(R.id.btnEditMetadata);
+        btnMoreOptions     = findViewById(R.id.btnMoreOptions);
         btnAddToPlaylist    = findViewById(R.id.btn_addToPlaylist);
         seekBar             = findViewById(R.id.seekBar);
         tv_liveDuration     = findViewById(R.id.textView_liveDuration);
@@ -308,23 +315,5 @@ public class PlayAudio extends AppCompatActivity {
         Intent i = new Intent(PlayAudio.this, EditAudioMetadata.class);
         i.putExtra(Keys.POSITION, MyUtils.getIndex(Store.AUDIO_FILES, playing_queue.get(position)));
         PlayAudio.this.startActivity(i);
-    }
-
-    private void showPopupMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.getMenuInflater().inflate(R.menu.play_audio_dropdown, popupMenu.getMenu());
-//        popupMenu.setOnMenuItemClickListener(item -> {
-//            switch (item.getItemId()) {
-//                case R.id.edit_metadata:
-//                    Toast.makeText(PlayAudio.this, "Action 1 clicked", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                case R.id.delete_file:
-//                    Toast.makeText(PlayAudio.this, "Action 2 clicked", Toast.LENGTH_SHORT).show();
-//                    return true;
-//                default:
-//                    return false;
-//            }
-//        });
-        popupMenu.show();
     }
 }

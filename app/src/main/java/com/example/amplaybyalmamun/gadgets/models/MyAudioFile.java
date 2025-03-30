@@ -43,6 +43,7 @@ public class MyAudioFile {
     private long size = -1;
     private int bitRate = -1;
     private String mimeType = "";
+    private String playlist = "";
     private boolean isPlaying = false;
     private boolean isFavorite = false;
     private boolean isSet = false;
@@ -272,6 +273,14 @@ public class MyAudioFile {
         return mimeType;
     }
 
+    // mime type
+    public void setPlaylist(String playlist) {
+        this.playlist = playlist;
+    }
+    public String getPlaylist() {
+        return playlist;
+    }
+
     // album art
     public  Bitmap getAlbumArt() {
         Tag tags = getMD();
@@ -350,7 +359,7 @@ public class MyAudioFile {
                 setPlaying(true);
             // set isFavorite
             DB_Helper dbHelper = new DB_Helper(context);/*MyUtils.isPresent(dbHelper.getAllAudioItems(DB_Helper.TABLE_FAVORITES), this);*/
-            setFavorite(dbHelper.getAudioItem(DB_Helper.TABLE_FAVORITES, this) != null);
+            setFavorite(dbHelper.getAudioItem(DB_Helper.TABLE_AUDIO_FAVORITES, this) != null);
             dbHelper.close();
         }
         // update
