@@ -11,6 +11,7 @@ public enum MyViews {
     TV_LIVE_DURATION,
     SEEK_BAR,
     BTN_FAVORITE,
+    BTN_ADD_TO_PLAYLIST,
     BTN_PLAY_PAUSE,
     BTN_NEXT,
     BTN_PREV,

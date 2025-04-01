@@ -104,6 +104,19 @@ public class DB_Helper extends SQLiteOpenHelper {
         }
     }
 
+    public List<String> getAudioPlaylists() {
+        List<String> playlists = new ArrayList<>();
+        try (SQLiteDatabase db = this.getReadableDatabase();
+             Cursor cursor = db.query(true, TABLE_AUDIO_PLAYLISTS, new String[]{CL_PLAYLIST},
+                     null, null, null, null, CL_PLAYLIST + " ASC", null)) {
+            while (cursor.moveToNext()) {
+                playlists.add(cursor.getString(cursor.getColumnIndexOrThrow(CL_PLAYLIST)));
+            }
+        }
+        return playlists;
+    }
+
+
     private ContentValues getContentValues(MyAudioFile bundle, String table) {
         ContentValues values = new ContentValues();
         values.put(CL_ID_FILE, bundle.getIdFile());

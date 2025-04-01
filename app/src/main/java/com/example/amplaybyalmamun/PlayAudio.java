@@ -31,6 +31,7 @@ import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
 import com.example.amplaybyalmamun.process.MyAudioPlayer;
 import com.example.amplaybyalmamun.process.MyMediaPlayer;
 import com.example.amplaybyalmamun.gadgets.MyViews;
+import com.example.amplaybyalmamun.process.PlayListHandler;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -180,6 +181,13 @@ public class PlayAudio extends AppCompatActivity {
         MyAudioPlayer.prevPlayer = player.getMyPlayer();
     /* * Media Player End * */
 
+    // add to playlist
+        PlayListHandler playListHandler = new PlayListHandler(PlayAudio.this, getResources());
+        btnAddToPlaylist.setOnClickListener(v -> {
+            MyUtils.setOnClickAnim(v);
+            playListHandler.addAudioTo(AUDIO_FILES.get(position));
+        });
+
     // repeat
         btnRepeat.setOnClickListener(v -> {
             MyUtils.setOnClickAnim(v);
@@ -245,6 +253,7 @@ public class PlayAudio extends AppCompatActivity {
                                     Toast.makeText(PlayAudio.this, "Deleted", Toast.LENGTH_SHORT).show();
                                     AUDIO_FILES.remove(position);
                                     btnNext.callOnClick();
+                                    btnPrev.callOnClick();
                                 } else {
                                     Toast.makeText(PlayAudio.this, "Error deleting file", Toast.LENGTH_SHORT).show();
                                 }
