@@ -7,6 +7,7 @@ import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuInflater;
@@ -28,6 +29,7 @@ import com.example.amplaybyalmamun.process.DB_Helper;
 import com.example.amplaybyalmamun.gadgets.utils.MyUtils;
 import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
+import com.example.amplaybyalmamun.process.MusicService;
 import com.example.amplaybyalmamun.process.MyAudioPlayer;
 import com.example.amplaybyalmamun.process.MyMediaPlayer;
 import com.example.amplaybyalmamun.gadgets.MyViews;
@@ -231,7 +233,8 @@ public class PlayAudio extends AppCompatActivity {
     // back
         btnBack.setOnClickListener(v -> {
             MyUtils.setOnClickAnim(v);
-            finish();
+//            finish();
+            startMusicService(MusicService.ACTION_PLAY);
         });
 
     // more options
@@ -324,5 +327,19 @@ public class PlayAudio extends AppCompatActivity {
         Intent i = new Intent(PlayAudio.this, EditAudioMetadata.class);
         i.putExtra(Keys.POSITION, MyUtils.getIndex(Store.AUDIO_FILES, playing_queue.get(position)));
         PlayAudio.this.startActivity(i);
+    }
+
+    private void startMusicService(String action) {
+        Intent serviceIntent = new Intent(this, MusicService.class);
+        serviceIntent.setAction(action);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+    }
+
+    private void stopMusicService() {
+        stopService(new Intent(this, MusicService.class));
     }
 }

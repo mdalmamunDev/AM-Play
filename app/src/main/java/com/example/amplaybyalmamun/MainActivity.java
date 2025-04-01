@@ -103,6 +103,15 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // check permissions for foreground play
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // API 34+
+            if (checkSelfPermission(Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK}, 1);
+            }
+        }
+
+
         // load views
         new Loader().start();
 
