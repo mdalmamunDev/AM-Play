@@ -68,4 +68,7 @@
     <string name="edit_metadata">Edit Metadata</string>
     <string name="delete_file">Delete File</string>
     <string name="add_playlist">Add Playlist</string>
+    <string name="prev">Prev</string>
+    <string name="play_pause">Play/Pause</string>
+    <string name="next">Next</string>
 </resources>

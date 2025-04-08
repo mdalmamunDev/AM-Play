@@ -11,8 +11,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.NotificationCompat;
 
 import com.example.amplaybyalmamun.R;
@@ -173,32 +175,46 @@ public class MusicService extends Service {
 
     private Notification createNotification() {
         String channelId = "music_service";
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, "AM Play",
                     NotificationManager.IMPORTANCE_LOW);
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
         }
 
-
         MyAudioFile crrAudio = playing_queue.get(position);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
-                .setContentTitle(crrAudio != null ? crrAudio.getTitle() : "Unknown")
-                .setContentText(crrAudio != null ? crrAudio.getArtists() : "Unknown")
+
+        // Collapsed layout
+        RemoteViews collapsed = new RemoteViews(getPackageName(), R.layout.custom_notification_collapsed);
+        if (crrAudio != null) collapsed.setImageViewBitmap(R.id.album_art, crrAudio.getAlbumArt());
+        collapsed.setTextViewText(R.id.txt_title, crrAudio != null ? crrAudio.getTitle() : "Unknown");
+        collapsed.setTextViewText(R.id.txt_artist, crrAudio != null ? crrAudio.getArtists() : "Unknown");
+        collapsed.setOnClickPendingIntent(R.id.btn_close, getPendingIntent(Keys.ACTION_STOP));
+
+        // Expanded layout
+        RemoteViews expanded = new RemoteViews(getPackageName(), R.layout.custom_notification_expanded);
+        if (crrAudio != null) expanded.setImageViewBitmap(R.id.album_art, crrAudio.getAlbumArt());
+        expanded.setTextViewText(R.id.txt_title, crrAudio != null ? crrAudio.getTitle() : "Unknown");
+        expanded.setTextViewText(R.id.txt_artist, crrAudio != null ? crrAudio.getArtists() : "Unknown");
+
+        expanded.setOnClickPendingIntent(R.id.btn_close, getPendingIntent(Keys.ACTION_STOP));
+        expanded.setOnClickPendingIntent(R.id.btn_prev, getPendingIntent(Keys.ACTION_PREV));
+        expanded.setOnClickPendingIntent(R.id.btn_next, getPendingIntent(Keys.ACTION_NEXT));
+        expanded.setOnClickPendingIntent(R.id.btn_play_pause,
+                getPendingIntent(musicState == Keys.STATE_PLAYING ? Keys.ACTION_PAUSE : Keys.ACTION_PLAY));
+        expanded.setImageViewResource(R.id.btn_play_pause,
+                musicState == Keys.STATE_PLAYING ? R.drawable.ic_pause_40 : R.drawable.ic_play_40);
+
+        return new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.img_def_album_art)
-                .addAction(R.drawable.ic_prev_40, "Prev", getPendingIntent(Keys.ACTION_PREV));
-
-        // Add the Play or Pause button depending on the music state
-        if (musicState == Keys.STATE_PLAYING)
-            notificationBuilder.addAction(R.drawable.ic_pause_40, "Pause", getPendingIntent(Keys.ACTION_PAUSE));
-        else
-            notificationBuilder.addAction(R.drawable.ic_play_40, "Play", getPendingIntent(Keys.ACTION_PLAY));
-
-        notificationBuilder.addAction(R.drawable.ic_next_40, "Next", getPendingIntent(Keys.ACTION_NEXT))
-                .setPriority(NotificationCompat.PRIORITY_LOW);
-
-
-        return notificationBuilder.build();
+                .setCustomContentView(collapsed)
+                .setCustomBigContentView(expanded)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setOnlyAlertOnce(true)
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .build();
     }
+
 
     private PendingIntent getPendingIntent(String action) {
         Intent intent = new Intent(this, MusicService.class).setAction(action);
