@@ -15,6 +15,9 @@ public class Keys {
     public static final String ACTION_PLAY = "PLAY";
     public static final String ACTION_PAUSE = "PAUSE";
     public static final String ACTION_STOP = "STOP";
+    public static final String ACTION_PREV = "ACTION_PREV";
+    public static final String ACTION_NEXT = "ACTION_NEXT";
+    public static final String ACTION_SHUFFLE = "ACTION_SHUFFLE";
 
     public static final int STATE_PLAYING = 1;
     public static final int STATE_PAUSED = 2;

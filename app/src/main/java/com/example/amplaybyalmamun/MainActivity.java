@@ -184,43 +184,43 @@ public class MainActivity extends AppCompatActivity {
                 });
 
             /* Play Bar */
-                // set list view
-                // blur bg
-                PlayAudio.setBg_blur.add(findViewById(R.id.blurBg_playBar));
-                // play pause btn
-                PlayAudio.setBtn_playPause.add(playBar_btn_playPause);
-                // next btn
-                PlayAudio.setBtn_next.add(playBar_btn_next);
-                // touchable view
-                PlayAudio.set_touchableView.add(playBar);
-                // album art
-                PlayAudio.setTv_albumArt.add(playBar_iv_albumArt);
-                // title
-                PlayAudio.setTv_title.add(playBar_tv_title);
-                // artist
-                PlayAudio.setTv_artist.add(playBar_tv_artist);
-                // live duration
-                PlayAudio.setTv_liveDuration.add(playBar_tv_liveDuration);
-                // seek bar
-                PlayAudio.setSeekBar.add(playBar_seekBar);
-                // set media player
-                HashMap<MyViews, Set<View>> viewMap = new HashMap<>();
-                    viewMap.put(MyViews.BG_BLUR,            PlayAudio.setBg_blur);
-                    viewMap.put(MyViews.TOUCHABLE_VIEW,     PlayAudio.set_touchableView);
-                    viewMap.put(MyViews.BTN_PLAY_PAUSE,     PlayAudio.setBtn_playPause);
-                    viewMap.put(MyViews.BTN_NEXT,           PlayAudio.setBtn_next);
-                    viewMap.put(MyViews.IV_ALBUM_ART,       PlayAudio.setTv_albumArt);
-                    viewMap.put(MyViews.TV_TITLE,           PlayAudio.setTv_title);
-                    viewMap.put(MyViews.TV_ARTISTS,         PlayAudio.setTv_artist);
-                    viewMap.put(MyViews.TV_LIVE_DURATION,   PlayAudio.setTv_liveDuration);
-                    viewMap.put(MyViews.SEEK_BAR,           PlayAudio.setSeekBar);
-
-                MyAudioPlayer.position = getLatPlayedIdx(context, AUDIO_FILES);
-                MyAudioPlayer.playFromPlayBar = true; // for pause first time
-                MyAudioPlayer player = new MyAudioPlayer(context, AUDIO_FILES, viewMap);
-
-                // set seekBar
-                player.setSeekBars();
+//                // set list view
+//                // blur bg
+//                PlayAudio.setBg_blur.add(findViewById(R.id.blurBg_playBar));
+//                // play pause btn
+//                PlayAudio.setBtn_playPause.add(playBar_btn_playPause);
+//                // next btn
+//                PlayAudio.setBtn_next.add(playBar_btn_next);
+//                // touchable view
+//                PlayAudio.set_touchableView.add(playBar);
+//                // album art
+//                PlayAudio.setTv_albumArt.add(playBar_iv_albumArt);
+//                // title
+//                PlayAudio.setTv_title.add(playBar_tv_title);
+//                // artist
+//                PlayAudio.setTv_artist.add(playBar_tv_artist);
+//                // live duration
+//                PlayAudio.setTv_liveDuration.add(playBar_tv_liveDuration);
+//                // seek bar
+//                PlayAudio.setSeekBar.add(playBar_seekBar);
+//                // set media player
+//                HashMap<MyViews, Set<View>> viewMap = new HashMap<>();
+//                    viewMap.put(MyViews.BG_BLUR,            PlayAudio.setBg_blur);
+//                    viewMap.put(MyViews.TOUCHABLE_VIEW,     PlayAudio.set_touchableView);
+//                    viewMap.put(MyViews.BTN_PLAY_PAUSE,     PlayAudio.setBtn_playPause);
+//                    viewMap.put(MyViews.BTN_NEXT,           PlayAudio.setBtn_next);
+//                    viewMap.put(MyViews.IV_ALBUM_ART,       PlayAudio.setTv_albumArt);
+//                    viewMap.put(MyViews.TV_TITLE,           PlayAudio.setTv_title);
+//                    viewMap.put(MyViews.TV_ARTISTS,         PlayAudio.setTv_artist);
+//                    viewMap.put(MyViews.TV_LIVE_DURATION,   PlayAudio.setTv_liveDuration);
+//                    viewMap.put(MyViews.SEEK_BAR,           PlayAudio.setSeekBar);
+//
+//                MyAudioPlayer.position = getLatPlayedIdx(context, AUDIO_FILES);
+//                MyAudioPlayer.playFromPlayBar = true; // for pause first time
+//                MyAudioPlayer player = new MyAudioPlayer(context, AUDIO_FILES, viewMap);
+//
+//                // set seekBar
+//                player.setSeekBars();
 
             /* Play Bar End */
 

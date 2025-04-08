@@ -145,7 +145,7 @@ public class PlayAudio extends AppCompatActivity {
         viewMap.put(MyViews.BTN_PREV,           setBtn_prev);
         viewMap.put(MyViews.TAGS_FIELD,         setTagField);
 
-        MyAudioPlayer player = new MyAudioPlayer(this, playing_queue, viewMap);
+        MyAudioPlayer player = new MyAudioPlayer(this, viewMap);
 
         // Register the receiver
         IntentFilter filter = new IntentFilter(Keys.MUSIC_STATE_CHANGED);

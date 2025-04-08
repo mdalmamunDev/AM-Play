@@ -85,54 +85,54 @@ public class GroupActivity extends AppCompatActivity {
 
 
     /* Play Bar */
-        // set list view
-            // blur bg
-            PlayAudio.setBg_blur.add(findViewById(R.id.blurBg_playBar));
-            // play pause btn
-            PlayAudio.setBtn_playPause.add(playBar_btn_playPause);
-            // play next btn
-            PlayAudio.setBtn_next.add(playBar_btn_playNext);
-            // touchable view
-            PlayAudio.set_touchableView.add(playBar);
-            // album art
-            PlayAudio.setTv_albumArt.add(playBar_iv_albumArt);
-            // title
-            PlayAudio.setTv_title.add(playBar_tv_title);
-            // artist
-            PlayAudio.setTv_artist.add(playBar_tv_artist);
-            // live duration
-            PlayAudio.setTv_liveDuration.add(playBar_tv_liveDuration);
-            // seek bar
-            PlayAudio.setSeekBar.add(playBar_seekBar);
-        // set media player
-        HashMap<MyViews, Set<View>> viewMap = new HashMap<>();
-        viewMap.put(MyViews.BG_BLUR,            PlayAudio.setBg_blur);
-        viewMap.put(MyViews.TOUCHABLE_VIEW,     PlayAudio.set_touchableView);
-        viewMap.put(MyViews.BTN_PLAY_PAUSE,     PlayAudio.setBtn_playPause);
-        viewMap.put(MyViews.IV_ALBUM_ART,       PlayAudio.setTv_albumArt);
-        viewMap.put(MyViews.TV_TITLE,           PlayAudio.setTv_title);
-        viewMap.put(MyViews.TV_ARTISTS,         PlayAudio.setTv_artist);
-        viewMap.put(MyViews.TV_LIVE_DURATION,   PlayAudio.setTv_liveDuration);
-        viewMap.put(MyViews.SEEK_BAR,           PlayAudio.setSeekBar);
-
-        MyAudioPlayer.position = getLatPlayedIdx(this, AUDIO_FILES);
-        MyAudioPlayer.playFromPlayBar = true; // for pause first time
-        MyAudioPlayer player = new MyAudioPlayer(this, AUDIO_FILES, viewMap);
-
-        // set seekBar
-        player.setSeekBars();
-
-        playBar_left.setOnClickListener(v -> {
-//            if(MyAudioPlayer.prevPlayer == null) return;
+//        // set list view
+//            // blur bg
+//            PlayAudio.setBg_blur.add(findViewById(R.id.blurBg_playBar));
+//            // play pause btn
+//            PlayAudio.setBtn_playPause.add(playBar_btn_playPause);
+//            // play next btn
+//            PlayAudio.setBtn_next.add(playBar_btn_playNext);
+//            // touchable view
+//            PlayAudio.set_touchableView.add(playBar);
+//            // album art
+//            PlayAudio.setTv_albumArt.add(playBar_iv_albumArt);
+//            // title
+//            PlayAudio.setTv_title.add(playBar_tv_title);
+//            // artist
+//            PlayAudio.setTv_artist.add(playBar_tv_artist);
+//            // live duration
+//            PlayAudio.setTv_liveDuration.add(playBar_tv_liveDuration);
+//            // seek bar
+//            PlayAudio.setSeekBar.add(playBar_seekBar);
+//        // set media player
+//        HashMap<MyViews, Set<View>> viewMap = new HashMap<>();
+//        viewMap.put(MyViews.BG_BLUR,            PlayAudio.setBg_blur);
+//        viewMap.put(MyViews.TOUCHABLE_VIEW,     PlayAudio.set_touchableView);
+//        viewMap.put(MyViews.BTN_PLAY_PAUSE,     PlayAudio.setBtn_playPause);
+//        viewMap.put(MyViews.IV_ALBUM_ART,       PlayAudio.setTv_albumArt);
+//        viewMap.put(MyViews.TV_TITLE,           PlayAudio.setTv_title);
+//        viewMap.put(MyViews.TV_ARTISTS,         PlayAudio.setTv_artist);
+//        viewMap.put(MyViews.TV_LIVE_DURATION,   PlayAudio.setTv_liveDuration);
+//        viewMap.put(MyViews.SEEK_BAR,           PlayAudio.setSeekBar);
 //
-//            // assigning listFile of PlayAudio before start activity
-//            if (playing_queue == null || playing_queue.size() == 0)
-//                playing_queue = AUDIO_FILES;
+//        MyAudioPlayer.position = getLatPlayedIdx(this, AUDIO_FILES);
+//        MyAudioPlayer.playFromPlayBar = true; // for pause first time
+//        MyAudioPlayer player = new MyAudioPlayer(this, AUDIO_FILES, viewMap);
 //
-//            Intent intent = new Intent(GroupActivity.this, PlayAudio.class);
-//            intent.putExtra(Keys.OPEN_BY, Keys.PLAY_BAR);
-//            startActivity(intent);
-        });
+//        // set seekBar
+//        player.setSeekBars();
+//
+//        playBar_left.setOnClickListener(v -> {
+////            if(MyAudioPlayer.prevPlayer == null) return;
+////
+////            // assigning listFile of PlayAudio before start activity
+////            if (playing_queue == null || playing_queue.size() == 0)
+////                playing_queue = AUDIO_FILES;
+////
+////            Intent intent = new Intent(GroupActivity.this, PlayAudio.class);
+////            intent.putExtra(Keys.OPEN_BY, Keys.PLAY_BAR);
+////            startActivity(intent);
+//        });
     /* Play Bar End */
 
         /* tag actions */

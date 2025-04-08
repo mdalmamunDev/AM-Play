@@ -34,13 +34,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
+
 public class MyAudioPlayer extends BroadcastReceiver {
     @SuppressLint("StaticFieldLeak")
     public static boolean playFromPlayBar = false;
     private final Context context;
     private final Set<View> setBg_blur, setTv_playingFrom, setTv_title, setTv_artists, setTv_duration, setTv_liveDuration, setImgV_albumArt, setSeekBar, setBtn_Favorite, setTagsField, setBtn_PlayPause;
 
-    private final List<MyAudioFile> listFiles;
     private MyAudioFile file;
     private String title, album, artist, path;
     Bitmap bmAlbumArt;
@@ -51,10 +52,9 @@ public class MyAudioPlayer extends BroadcastReceiver {
     public static boolean isComplete = false;
     private int musicState;
 
-    public MyAudioPlayer(Context context, List<MyAudioFile> listFiles, HashMap<MyViews, Set<View>> viewMap) {
+    public MyAudioPlayer(Context context, HashMap<MyViews, Set<View>> viewMap) {
         this.context = context;
-        this.listFiles = listFiles;
-        prePosition = (prePositionGlobal > -1) ? MyUtils.getIndex(listFiles, Store.AUDIO_FILES.get(prePositionGlobal)) : -1;
+        prePosition = (prePositionGlobal > -1) ? MyUtils.getIndex(playing_queue, Store.AUDIO_FILES.get(prePositionGlobal)) : -1;
 
         setBg_blur = viewMap.getOrDefault(MyViews.BG_BLUR, null);
         setTv_playingFrom = viewMap.getOrDefault(MyViews.TV_PLAYING_FROM, null);
@@ -107,14 +107,14 @@ public class MyAudioPlayer extends BroadcastReceiver {
 
         // set onclick listener on action buttons
         // btn favorite
-        if (setBtn_Favorite != null)
+        if (setBtn_Favorite != null) {
             for (View btn : setBtn_Favorite) {
                 if (btn == null) continue;
                 btn.setOnClickListener(v -> {
                     AppCompatImageButton btnFavorite = (AppCompatImageButton) btn;
                     DB_Helper dbHelper = new DB_Helper(context);
 
-                    if (file.isFavorite()){ // remove from favorite
+                    if (file.isFavorite()) { // remove from favorite
                         MyAudioFile favFile = dbHelper.getAudioItem(DB_Helper.TABLE_AUDIO_FAVORITES, file);
 
                         if (favFile == null) { // check problem
@@ -128,40 +128,45 @@ public class MyAudioPlayer extends BroadcastReceiver {
                         Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show();
                     } else { // add to favorite
                         btnFavorite.setImageResource(R.drawable.ic_favorite_true);
-                        dbHelper.addAudioItem(DB_Helper.TABLE_AUDIO_FAVORITES, listFiles.get(position));
+                        dbHelper.addAudioItem(DB_Helper.TABLE_AUDIO_FAVORITES, playing_queue.get(position));
                         file.setFavorite(true);
                         Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
                     }
                     dbHelper.close();
                 });
             }
-        if (setBtn_PlayPause != null)
+        }
+        if (setBtn_PlayPause != null) {
             for (View btn : setBtn_PlayPause)
                 if (btn != null)
                     btn.setOnClickListener(v -> {
                         MyUtils.setOnClickAnim(v);
                         onClickPlayPause();
                     });
-        if (setBtn_Next != null)
+        }
+        if (setBtn_Next != null) {
             for (View btn : setBtn_Next)
                 if (btn != null)
                     btn.setOnClickListener(v -> {
                         MyUtils.setOnClickAnim(v);
-                        playPrevOrNext(1);
+                        startMusicService(Keys.ACTION_NEXT);
                     });
-        if (setBtn_Prev != null)
+        }
+        if (setBtn_Prev != null) {
             for (View btn : setBtn_Prev)
                 if (btn != null)
                     btn.setOnClickListener(v -> {
                         MyUtils.setOnClickAnim(v);
-                        playPrevOrNext( -1);
+                        startMusicService(Keys.ACTION_PREV);
                     });
-        if (setTouchableViews != null)
+        }
+        if (setTouchableViews != null) {
             for (View tv : setTouchableViews) {
                 if (tv == null) continue;
                 TouchableView touchableView = (TouchableView) tv;
                 touchableView.setOnTouchListener(new View.OnTouchListener() {
                     float startX, startY;
+
                     @SuppressLint("ClickableViewAccessibility")
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -195,6 +200,7 @@ public class MyAudioPlayer extends BroadcastReceiver {
                     }
                 });
             }
+        }
     }
 
 
@@ -268,8 +274,8 @@ public class MyAudioPlayer extends BroadcastReceiver {
         // get data
         boolean isFav = false;
         List<String> tags = new ArrayList<>();
-        if (position > -1 && position < listFiles.size()) {
-            file = listFiles.get(position);
+        if (position > -1 && position < playing_queue.size()) {
+            file = playing_queue.get(position);
             file.prepare(context);
             title       = file.getTitle();
             album       = file.getAlbum();
@@ -298,7 +304,7 @@ public class MyAudioPlayer extends BroadcastReceiver {
                 if (tv != null) ((TextView)tv).setText(artist);
         if (setTv_duration != null)
             for (View tv : setTv_duration)
-                if (tv != null) ((TextView)tv).setText(listFiles.get(position).getDurationInTime());
+                if (tv != null) ((TextView)tv).setText(playing_queue.get(position).getDurationInTime());
         if (setBtn_Favorite != null)
             for (View btn : setBtn_Favorite) {
                 if (btn != null && isFav)   ((AppCompatImageButton) btn).setImageResource(R.drawable.ic_favorite_true);
@@ -329,15 +335,15 @@ public class MyAudioPlayer extends BroadcastReceiver {
 
         if (prePosition > -1 && !playFromPlayBar) {
             if (prePositionGlobal > -1) Store.AUDIO_FILES.get(prePositionGlobal).setPlaying(false);
-            listFiles.get(prePosition).setPlaying(false);
+            playing_queue.get(prePosition).setPlaying(false);
             if (songsFrg != null)  songsFrg.notifyItemChanged(prePosition);
             if (groupActivity != null) groupActivity.notifyItemChanged(prePosition);
         }
 
         if (position > -1 && !playFromPlayBar) {
-            int globalPosition = MyUtils.getIndex(Store.AUDIO_FILES, listFiles.get(position));
+            int globalPosition = MyUtils.getIndex(Store.AUDIO_FILES, playing_queue.get(position));
 
-            listFiles.get(position).setPlaying(true);
+            playing_queue.get(position).setPlaying(true);
             Store.AUDIO_FILES.get(globalPosition).setPlaying(true);
             if (groupActivity != null) groupActivity.notifyItemChanged(position);
             if (songsFrg != null) songsFrg.notifyItemChanged(position);
@@ -412,7 +418,7 @@ public class MyAudioPlayer extends BroadcastReceiver {
 
 
     private void startMusicService(String action) {
-        this.startMusicService(action, null);
+        this.startMusicService(action, "");
     }
     private void startMusicService(String action, String path) {
         Intent serviceIntent = new Intent(context, MusicService.class);
