@@ -9,23 +9,25 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+
 import com.example.amplaybyalmamun.R;
 import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
 import com.example.amplaybyalmamun.gadgets.utils.MyUtils;
 
 import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
+import static com.example.amplaybyalmamun.gadgets.utils.Store.position;
 
 import java.util.Random;
 
 public class MusicService extends Service {
     private MediaPlayer mediaPlayer;
     private int musicState = Keys.STATE_STOPPED;
-    private int currentIndex = 0;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -50,21 +52,41 @@ public class MusicService extends Service {
             case Keys.ACTION_PREV:
                 prevOrNext(-1);
                 break;
+            case Keys.ACTION_SEEK: // Handle Seek action from Activity
+                int seekPosition = intent.getIntExtra(Keys.EXTRA_PROGRESS, 0);
+                seekToPosition(seekPosition);
+                break;
         }
 
         startForeground(1, createNotification());
         return START_STICKY;
     }
 
+
+    private Handler handler = new Handler();
+    private Runnable updateSeekBarRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                int currentPosition = mediaPlayer.getCurrentPosition();
+                sendMusicBroadcast(currentPosition);
+                // Repeat this task every 1000 ms (1 second)
+                handler.postDelayed(this, 1000);
+            }
+        }
+    };
+
     private void playMusic() {
         if (mediaPlayer == null) {
-            loadTrack(currentIndex);
+            loadTrack(position);
         }
 
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
             musicState = Keys.STATE_PLAYING;
-            sendMusicStateBroadcast(musicState);
+            sendMusicBroadcast();
+
+            handler.post(updateSeekBarRunnable);
         }
     }
 
@@ -72,7 +94,7 @@ public class MusicService extends Service {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             musicState = Keys.STATE_PAUSED;
-            sendMusicStateBroadcast(musicState);
+            sendMusicBroadcast();
         }
     }
 
@@ -82,17 +104,28 @@ public class MusicService extends Service {
             mediaPlayer.release();
             mediaPlayer = null;
             musicState = Keys.STATE_STOPPED;
-            sendMusicStateBroadcast(musicState);
+            sendMusicBroadcast();
+            handler.removeCallbacks(updateSeekBarRunnable);
             stopSelf();
         }
     }
 
     private void prevOrNext(int k) {
         //  k: 1 = next & -1 = prev
-        currentIndex = AppSettings.shuffleStatus ?
+        position = AppSettings.shuffleStatus ?
                 new Random().nextInt(playing_queue.size()) :
-                (currentIndex + k) % playing_queue.size();
+                (position + k) % playing_queue.size();
         restartTrack();
+    }
+
+
+    private void seekToPosition(int position) {
+        if (mediaPlayer != null) {
+            mediaPlayer.seekTo(position);
+//
+//            if (musicState == Keys.STATE_PLAYING) mediaPlayer.start();
+//            else if (musicState == Keys.STATE_PAUSED) mediaPlayer.pause();
+        }
     }
 
     private void restartTrack() {
@@ -100,7 +133,7 @@ public class MusicService extends Service {
             mediaPlayer.stop();
             mediaPlayer.release();
         }
-        loadTrack(currentIndex);
+        loadTrack(position);
         playMusic();
     }
 
@@ -115,7 +148,7 @@ public class MusicService extends Service {
         mediaPlayer.setLooping(false);
         mediaPlayer.setOnCompletionListener(mp -> {
 
-            boolean isLastTrack = currentIndex == playing_queue.size() - 1;
+            boolean isLastTrack = position == playing_queue.size() - 1;
             if (AppSettings.repeatStatus == AppSettings.REPEAT_ONE) {
                 restartTrack(); // Replay same track
             } else if (AppSettings.repeatStatus == AppSettings.REPEAT_ORDER && isLastTrack) {
@@ -126,9 +159,15 @@ public class MusicService extends Service {
         });
     }
 
-    private void sendMusicStateBroadcast(int state) {
+
+    private void sendMusicBroadcast() {
+        sendMusicBroadcast(-1);
+    }
+    private void sendMusicBroadcast(int progress) {
         Intent intent = new Intent(Keys.MUSIC_STATE_CHANGED);
-        intent.putExtra("state", state);
+        intent.putExtra(Keys.EXTRA_STATE, musicState);
+        if (progress > -1)
+            intent.putExtra(Keys.EXTRA_PROGRESS, progress);
         sendBroadcast(intent);
     }
 
@@ -141,30 +180,29 @@ public class MusicService extends Service {
         }
 
 
-        MyAudioFile crrAudio = playing_queue.get(currentIndex);
-        return new NotificationCompat.Builder(this, channelId)
+        MyAudioFile crrAudio = playing_queue.get(position);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle(crrAudio != null ? crrAudio.getTitle() : "Unknown")
                 .setContentText(crrAudio != null ? crrAudio.getArtists() : "Unknown")
                 .setSmallIcon(R.drawable.img_def_album_art)
-                .addAction(R.drawable.ic_prev_40, "Prev", getPendingIntent(Keys.ACTION_PREV))
-                .addAction(R.drawable.ic_play_40, "Play", getPendingIntent(Keys.ACTION_PLAY))
-                .addAction(R.drawable.ic_pause_40, "Pause", getPendingIntent(Keys.ACTION_PAUSE))
-                .addAction(R.drawable.ic_next_40, "Next", getPendingIntent(Keys.ACTION_NEXT))
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .build();
+                .addAction(R.drawable.ic_prev_40, "Prev", getPendingIntent(Keys.ACTION_PREV));
+
+        // Add the Play or Pause button depending on the music state
+        if (musicState == Keys.STATE_PLAYING)
+            notificationBuilder.addAction(R.drawable.ic_pause_40, "Pause", getPendingIntent(Keys.ACTION_PAUSE));
+        else
+            notificationBuilder.addAction(R.drawable.ic_play_40, "Play", getPendingIntent(Keys.ACTION_PLAY));
+
+        notificationBuilder.addAction(R.drawable.ic_next_40, "Next", getPendingIntent(Keys.ACTION_NEXT))
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+
+
+        return notificationBuilder.build();
     }
 
     private PendingIntent getPendingIntent(String action) {
         Intent intent = new Intent(this, MusicService.class).setAction(action);
         return PendingIntent.getService(this, action.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-    }
-
-    private String getMusicStateText() {
-        switch (musicState) {
-            case Keys.STATE_PLAYING: return "Playing music...";
-            case Keys.STATE_PAUSED: return "Music paused";
-            case Keys.STATE_STOPPED: default: return "Music stopped";
-        }
     }
 
     @Override

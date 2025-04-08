@@ -46,7 +46,7 @@
             android:name=".EditAudioMetadata"
             android:exported="false" />
         <activity
-            android:name=".PlayAudio"
+            android:name=".PlayMusicActivity"
             android:exported="false"
             android:theme="@style/CustomTheme" />
         <activity

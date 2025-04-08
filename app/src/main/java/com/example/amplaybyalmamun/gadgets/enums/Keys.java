@@ -11,13 +11,19 @@ public class Keys {
     public static String SORT_ASC = " ASC";
     public static String SORT_DESC = " DESC";
     public static String MUSIC_STATE_CHANGED = "com.example.amplaybyalmamun.MUSIC_STATE_CHANGED";
-    public static final String EXTRA_PATH = "EXTRA_PATH";
+
+
+    public static final String EXTRA_PATH = "path";
+    public static final String EXTRA_PROGRESS = "progress";
+    public static final String EXTRA_STATE = "state";
+
+
     public static final String ACTION_PLAY = "PLAY";
     public static final String ACTION_PAUSE = "PAUSE";
     public static final String ACTION_STOP = "STOP";
     public static final String ACTION_PREV = "ACTION_PREV";
     public static final String ACTION_NEXT = "ACTION_NEXT";
-    public static final String ACTION_SHUFFLE = "ACTION_SHUFFLE";
+    public static final String ACTION_SEEK = "ACTION_SEEK";
 
     public static final int STATE_PLAYING = 1;
     public static final int STATE_PAUSED = 2;

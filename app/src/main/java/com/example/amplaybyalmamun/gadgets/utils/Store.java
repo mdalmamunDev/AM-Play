@@ -9,6 +9,7 @@ import java.util.List;
 public class Store {
     public static List<MyAudioFile> AUDIO_FILES = new ArrayList<>();
     public static List<MyAudioFile> playing_queue = new ArrayList<>();
+    public static int position;
     public static int mainTagLove = 0, mainTagBroken = 1, mainTagHeat = 2;
     public static String[] mainAmTags = {"Love", "Broken", "Heat"};
     public static boolean isThreadRefreshRunning = false;

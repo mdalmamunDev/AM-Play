@@ -1,9 +1,5 @@
 package com.example.amplaybyalmamun;
 
-import static com.example.amplaybyalmamun.gadgets.utils.Store.AUDIO_FILES;
-import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
-import static com.example.amplaybyalmamun.gadgets.utils.MyUtils.getLatPlayedIdx;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -15,7 +11,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,16 +22,12 @@ import com.example.amplaybyalmamun.gadgets.models.ItemGroup;
 import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
 import com.example.amplaybyalmamun.gadgets.utils.Store;
-import com.example.amplaybyalmamun.process.MyAudioPlayer;
-import com.example.amplaybyalmamun.gadgets.MyViews;
 import com.example.amplaybyalmamun.gadgets.models.TagBarItems;
 import com.example.amplaybyalmamun.threads.TagBarLoader;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public class GroupActivity extends AppCompatActivity {
     List<String> clickedTags = new ArrayList<>();
@@ -168,7 +159,7 @@ public class GroupActivity extends AppCompatActivity {
 
             // Launch PlayActivity and pass the audioFile
             startActivity(
-                    new Intent(this, PlayAudio.class)
+                    new Intent(this, PlayMusicActivity.class)
                     .putExtra(Keys.POSITION, 0)
                     .putExtra(Keys.TOTAL_AUDIOS, listFiles.size())
             );
@@ -185,7 +176,7 @@ public class GroupActivity extends AppCompatActivity {
 
             // Launch PlayActivity and pass the audioFile
             startActivity(
-                    new Intent(this, PlayAudio.class)
+                    new Intent(this, PlayMusicActivity.class)
                             .putExtra(Keys.POSITION, MyUtils.random(listFiles.size()))
                             .putExtra(Keys.TOTAL_AUDIOS, listFiles.size())
             );

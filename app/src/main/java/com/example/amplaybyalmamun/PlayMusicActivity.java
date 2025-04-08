@@ -3,6 +3,7 @@ package com.example.amplaybyalmamun;
 
 import static com.example.amplaybyalmamun.gadgets.utils.Store.AUDIO_FILES;
 import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
+import static com.example.amplaybyalmamun.gadgets.utils.Store.position;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -29,7 +30,7 @@ import com.example.amplaybyalmamun.process.AppSettings;
 import com.example.amplaybyalmamun.gadgets.utils.MyUtils;
 import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
-import com.example.amplaybyalmamun.process.MyAudioPlayer;
+import com.example.amplaybyalmamun.process.MyMusicPlayer;
 import com.example.amplaybyalmamun.gadgets.MyViews;
 import com.example.amplaybyalmamun.process.PlayListHandler;
 
@@ -37,7 +38,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PlayAudio extends AppCompatActivity {
+
+public class PlayMusicActivity extends AppCompatActivity {
 
     MyAudioFile file;
     AppSettings settings;
@@ -60,7 +62,6 @@ public class PlayAudio extends AppCompatActivity {
     TextView tv_PlayingFrom, tv_title, tv_artists, tv_liveDuration, tv_duration;
     AppCompatImageButton btnBack, btnFavorite, btnRepeat, btnPlayPause, btnPrev, btnNext, btnShuffle, btnMoreOptions, btnAddToPlaylist;
     LinearLayoutCompat tagsField;
-    public static int position;
     int totalAudios;
     String activity_open_by = "";
 
@@ -69,7 +70,7 @@ public class PlayAudio extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_play_audio);
+        setContentView(R.layout.activity_play_music);
 
         // check if audiFiles
         if (playing_queue == null || playing_queue.isEmpty()) {finish(); return;}
@@ -127,7 +128,7 @@ public class PlayAudio extends AppCompatActivity {
 
 
         // check
-        MyAudioPlayer.position = position;
+//        MyAudioPlayer.position = position;
         // set media player
         HashMap<MyViews, Set<View>> viewMap = new HashMap<>();
         viewMap.put(MyViews.BG_BLUR, setBg_blur);
@@ -145,7 +146,7 @@ public class PlayAudio extends AppCompatActivity {
         viewMap.put(MyViews.BTN_PREV,           setBtn_prev);
         viewMap.put(MyViews.TAGS_FIELD,         setTagField);
 
-        MyAudioPlayer player = new MyAudioPlayer(this, viewMap);
+        MyMusicPlayer player = new MyMusicPlayer(this, viewMap);
 
         // Register the receiver
         IntentFilter filter = new IntentFilter(Keys.MUSIC_STATE_CHANGED);
@@ -157,7 +158,7 @@ public class PlayAudio extends AppCompatActivity {
     /* * Media Player End * */
 
     // add to playlist
-        PlayListHandler playListHandler = new PlayListHandler(PlayAudio.this, getResources());
+        PlayListHandler playListHandler = new PlayListHandler(PlayMusicActivity.this, getResources());
         btnAddToPlaylist.setOnClickListener(v -> {
             MyUtils.setOnClickAnim(v);
             playListHandler.addAudioTo(AUDIO_FILES.get(position));
@@ -213,7 +214,7 @@ public class PlayAudio extends AppCompatActivity {
     // more options
         btnMoreOptions.setOnClickListener(v -> {
             MyUtils.setOnClickAnim(v);
-            PopupMenu popup = new PopupMenu(PlayAudio.this, v);
+            PopupMenu popup = new PopupMenu(PlayMusicActivity.this, v);
             MenuInflater inflater = popup.getMenuInflater();
             inflater.inflate(R.menu.play_audio_dropdown, popup.getMenu());
 
@@ -226,12 +227,12 @@ public class PlayAudio extends AppCompatActivity {
                             .setMessage("Are you sure you want to delete this file?")
                             .setPositiveButton("Yes", (dialog, which) -> {
                                 if (file.delete()) {
-                                    Toast.makeText(PlayAudio.this, "Deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PlayMusicActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
                                     AUDIO_FILES.remove(position);
                                     btnNext.callOnClick();
                                     btnPrev.callOnClick();
                                 } else {
-                                    Toast.makeText(PlayAudio.this, "Error deleting file", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PlayMusicActivity.this, "Error deleting file", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .setNegativeButton("No", null)
@@ -276,7 +277,7 @@ public class PlayAudio extends AppCompatActivity {
         tagsField = findViewById(R.id.tags_con);
 
         // settings
-        settings            =  new AppSettings(PlayAudio.this);
+        settings            =  new AppSettings(PlayMusicActivity.this);
         shuffleStatus       = settings.getShuffleStatus();
         repeatStatus        = settings.getRepeatStatus();
 
@@ -297,8 +298,8 @@ public class PlayAudio extends AppCompatActivity {
 
 
     private void startEditMetadataActivity() {
-        Intent i = new Intent(PlayAudio.this, EditAudioMetadata.class);
+        Intent i = new Intent(PlayMusicActivity.this, EditAudioMetadata.class);
         i.putExtra(Keys.POSITION, MyUtils.getIndex(Store.AUDIO_FILES, playing_queue.get(position)));
-        PlayAudio.this.startActivity(i);
+        PlayMusicActivity.this.startActivity(i);
     }
 }

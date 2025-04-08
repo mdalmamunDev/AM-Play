@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.View;
 
-import androidx.core.content.ContextCompat;
-
-import com.example.amplaybyalmamun.PlayAudio;
+import com.example.amplaybyalmamun.PlayMusicActivity;
 import com.example.amplaybyalmamun.R;
 import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
@@ -78,7 +76,7 @@ public class Thread_SetMDOnRecycler extends Thread {
                     Store.playing_queue = this.listFiles;
 
                     // Launch PlayActivity and pass the audioFile
-                    Intent intent = new Intent(context, PlayAudio.class);
+                    Intent intent = new Intent(context, PlayMusicActivity.class);
                     intent.putExtra(Keys.POSITION, position);
                     intent.putExtra(Keys.TOTAL_AUDIOS, size);
                     context.startActivity(intent);

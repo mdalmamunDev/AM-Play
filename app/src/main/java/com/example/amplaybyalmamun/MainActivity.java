@@ -3,8 +3,6 @@ package com.example.amplaybyalmamun;
 import static android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION;
 import static android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION;
 import static com.example.amplaybyalmamun.gadgets.utils.Store.AUDIO_FILES;
-import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
-import static com.example.amplaybyalmamun.gadgets.utils.MyUtils.getLatPlayedIdx;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -39,17 +37,12 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.amplaybyalmamun.gadgets.utils.Store;
 import com.example.amplaybyalmamun.process.AccessAudioFiles;
 import com.example.amplaybyalmamun.process.AppSettings;
-import com.example.amplaybyalmamun.gadgets.enums.Keys;
-import com.example.amplaybyalmamun.process.MyAudioPlayer;
-import com.example.amplaybyalmamun.gadgets.MyViews;
 import com.example.amplaybyalmamun.adaptes.ViewPagerAdapter;
 import com.example.amplaybyalmamun.threads.Thread_Refresh;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
