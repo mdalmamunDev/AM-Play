@@ -1,17 +1,18 @@
 package com.example.amplaybyalmamun.process;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -22,25 +23,22 @@ import com.example.amplaybyalmamun.R;
 import com.example.amplaybyalmamun.custom_views.TouchableView;
 import com.example.amplaybyalmamun.fragments.FragSongs;
 import com.example.amplaybyalmamun.gadgets.MyViews;
+import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
 import com.example.amplaybyalmamun.gadgets.utils.MyUtils;
 import com.example.amplaybyalmamun.gadgets.utils.Store;
 import com.example.amplaybyalmamun.threads.BlurBgLoader;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-public class MyAudioPlayer{
+public class MyAudioPlayer extends BroadcastReceiver {
     @SuppressLint("StaticFieldLeak")
-    public static MyMediaPlayer prevPlayer = null;
-    private final MyMediaPlayer myPlayer;
     public static boolean playFromPlayBar = false;
     private final Context context;
-    private final Set<View> setBg_blur, setTv_playingFrom, setTv_title, setTv_artists, setTv_duration, setTv_liveDuration, setImgV_albumArt, setSeekBar, setBtn_Favorite, setTagsField;
-
+    private final Set<View> setBg_blur, setTv_playingFrom, setTv_title, setTv_artists, setTv_duration, setTv_liveDuration, setImgV_albumArt, setSeekBar, setBtn_Favorite, setTagsField, setBtn_PlayPause;
 
     private final List<MyAudioFile> listFiles;
     private MyAudioFile file;
@@ -51,9 +49,9 @@ public class MyAudioPlayer{
     int prePosition;
     boolean seekWasPlaying = false;
     public static boolean isComplete = false;
+    private int musicState;
 
-    public MyAudioPlayer(Context context, List<MyAudioFile> listFiles, MyMediaPlayer myPlayer, HashMap<MyViews, Set<View>> viewMap) {
-        this.myPlayer = myPlayer;
+    public MyAudioPlayer(Context context, List<MyAudioFile> listFiles, HashMap<MyViews, Set<View>> viewMap) {
         this.context = context;
         this.listFiles = listFiles;
         prePosition = (prePositionGlobal > -1) ? MyUtils.getIndex(listFiles, Store.AUDIO_FILES.get(prePositionGlobal)) : -1;
@@ -69,38 +67,42 @@ public class MyAudioPlayer{
         setBtn_Favorite = viewMap.getOrDefault(MyViews.BTN_FAVORITE, null);
         setTagsField = viewMap.getOrDefault(MyViews.TAGS_FIELD, null);
 
-        Set<View> setTouchableViews = viewMap.getOrDefault(MyViews.TOUCHABLE_VIEW, null),
-        setBtn_PlayPause = viewMap.getOrDefault(MyViews.BTN_PLAY_PAUSE,  null),
-        setBtn_Next = viewMap.getOrDefault(MyViews.BTN_NEXT, null),
-        setBtn_Prev = viewMap.getOrDefault(MyViews.BTN_PREV, null);
+        Set<View> setTouchableViews = viewMap.getOrDefault(MyViews.TOUCHABLE_VIEW, null);
+        setBtn_PlayPause = viewMap.getOrDefault(MyViews.BTN_PLAY_PAUSE,  null);
+        Set<View> setBtn_Next = viewMap.getOrDefault(MyViews.BTN_NEXT, null);
+        Set<View> setBtn_Prev = viewMap.getOrDefault(MyViews.BTN_PREV, null);
 
 
         getAndSetData();
         // check file
         if (file == null) {
-            MyUtils.showProblem(context); return;}
-        // check if player set
-        if (!myPlayer.isSet()) myPlayer.setPlayer(path);
-        else {
-            if (!playFromPlayBar || myPlayer.isPlaying()) myPlayer.start();
-            if (playFromPlayBar) playFromPlayBar = false;
-            setSeekBars();
-            updateSeekBarAndDurationText();
+            MyUtils.showProblem(context);
+            return;
         }
-        myPlayer.setOnPreparedListener(mp -> {
-            // Start updating the SeekBar progress while the audio is playing
-            if (!playFromPlayBar) myPlayer.start();
-            else playFromPlayBar = false;
 
-            if (setSeekBar != null) { setSeekBars(); updateSeekBarAndDurationText();}
-        });
-        // on finish media
-        myPlayer.setOnCompletionListener(mp -> {
-            myPlayer.pause();
-            isComplete = true;
-            if (!(AppSettings.repeatStatus == AppSettings.REPEAT_ONE || (AppSettings.repeatStatus == AppSettings.REPEAT_ORDER && position == listFiles.size()-1)))
-                playPrevOrNext(myPlayer, 1);
-        });
+        startMusicService(Keys.ACTION_PLAY, file.getPath());
+        // check if player set
+//        if (!myPlayer.isSet()) myPlayer.setPlayer(path);
+//        else {
+//            if (!playFromPlayBar || myPlayer.isPlaying()) myPlayer.start();
+//            if (playFromPlayBar) playFromPlayBar = false;
+//            setSeekBars();
+//            updateSeekBarAndDurationText();
+//        }
+//        myPlayer.setOnPreparedListener(mp -> {
+//            // Start updating the SeekBar progress while the audio is playing
+//            if (!playFromPlayBar) myPlayer.start();
+//            else playFromPlayBar = false;
+//
+//            if (setSeekBar != null) { setSeekBars(); updateSeekBarAndDurationText();}
+//        });
+//        // on finish media
+//        myPlayer.setOnCompletionListener(mp -> {
+//            myPlayer.pause();
+//            isComplete = true;
+//            if (!(AppSettings.repeatStatus == AppSettings.REPEAT_ONE || (AppSettings.repeatStatus == AppSettings.REPEAT_ORDER && position == listFiles.size()-1)))
+//                playPrevOrNext(myPlayer, 1);
+//        });
 
 
         // set onclick listener on action buttons
@@ -145,14 +147,14 @@ public class MyAudioPlayer{
                 if (btn != null)
                     btn.setOnClickListener(v -> {
                         MyUtils.setOnClickAnim(v);
-                        playPrevOrNext(myPlayer, 1);
+                        playPrevOrNext(1);
                     });
         if (setBtn_Prev != null)
             for (View btn : setBtn_Prev)
                 if (btn != null)
                     btn.setOnClickListener(v -> {
                         MyUtils.setOnClickAnim(v);
-                        playPrevOrNext(myPlayer, -1);
+                        playPrevOrNext( -1);
                     });
         if (setTouchableViews != null)
             for (View tv : setTouchableViews) {
@@ -170,67 +172,96 @@ public class MyAudioPlayer{
                                 break;
 
                             case MotionEvent.ACTION_UP:
-                                float endX = event.getX();
-                                float deltaX = endX - startX;
-
-                                float endY = event.getY();
-                                float deltaY = endY - startY;
-
-                                // Determine swipe direction based on deltaX value
-                                if (deltaX > 0 && deltaX > deltaY) {
-                                    // Swiped left(<==) change to the previous audio track
-                                    playPrevOrNext(myPlayer, -1);
-                                } else if (deltaX < 0 && deltaX < Math.min(deltaY, deltaY * -1)) {
-                                    // Swiped right(==>), change to the next audio track
-                                    playPrevOrNext(myPlayer, 1);
-                                } else if (deltaY > 0) {
-                                    ((AppCompatActivity)context).finish();
-                                }
-                                //System.out.println("swipe: x-"+deltaX + ", y-" + deltaY);
-                                break;
+//                                float endX = event.getX();
+//                                float deltaX = endX - startX;
+//
+//                                float endY = event.getY();
+//                                float deltaY = endY - startY;
+//
+//                                // Determine swipe direction based on deltaX value
+//                                if (deltaX > 0 && deltaX > deltaY) {
+//                                    // Swiped left(<==) change to the previous audio track
+//                                    playPrevOrNext(myPlayer, -1);
+//                                } else if (deltaX < 0 && deltaX < Math.min(deltaY, deltaY * -1)) {
+//                                    // Swiped right(==>), change to the next audio track
+//                                    playPrevOrNext(myPlayer, 1);
+//                                } else if (deltaY > 0) {
+//                                    ((AppCompatActivity)context).finish();
+//                                }
+//                                //System.out.println("swipe: x-"+deltaX + ", y-" + deltaY);
+//                                break;
                         }
                         return true;
                     }
                 });
             }
     }
+
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        musicState = intent.getIntExtra("state", -1);
+
+        String stateText = "";
+        int btnRes = R.drawable.ic_play_40;
+        switch (musicState) {
+            case Keys.STATE_PLAYING:
+                stateText = "Music is Playing";
+                btnRes = R.drawable.ic_pause_40;
+                break;
+            case Keys.STATE_PAUSED:
+                stateText = "Music is Paused";
+                break;
+            default:
+                stateText = "Music is Stopped";
+                break;
+        }
+        if (setTv_playingFrom != null)
+            for (View tv : setTv_playingFrom)
+                if (tv != null) ((TextView)tv).setText(stateText);
+
+        if (setBtn_PlayPause != null)
+            for (View btn : setBtn_PlayPause)
+                if (btn != null) {
+                    AppCompatImageButton btnPlayPause = (AppCompatImageButton) btn;
+                    btnPlayPause.setImageResource(btnRes);
+                }
+    }
     public void onClickPlayPause() {
-        if (myPlayer.isPlaying())
-            // Pause the audio if it is playing
-            myPlayer.pause();
+        if (musicState == Keys.STATE_PLAYING)
+            startMusicService(Keys.ACTION_PAUSE);
         else
-            // Start playing the audio if it is not playing
-            myPlayer.start();
-        updateSeekBarAndDurationText();
+            startMusicService(Keys.ACTION_PLAY);
+//        updateSeekBarAndDurationText();
     }
 
-    public void playPrevOrNext(MyMediaPlayer myPlayer, int k) {
-        if(listFiles == null) return;
-
-        if (AppSettings.shuffleStatus)
-            k = MyUtils.random(listFiles.size()) * k;
-
-        // set prePositions
-        prePosition = position;
-        prePositionGlobal = (position > -1) ? MyUtils.getIndex(Store.AUDIO_FILES, listFiles.get(position)) : -1;
-
-        position = (position+k) % listFiles.size();
-        // get new position
-        while (position != prePosition) {
-            // after left most
-            if (position < 0) position = listFiles.size()-1;
-            MyAudioFile audio = listFiles.get(position);
-            // check is valid
-            if (audio != null && !audio.getPath().isEmpty() && new File(audio.getPath()).exists())    break;
-            // update
-            position = (position+k) % listFiles.size();
-        }
-
-        if (position == -1) return;
-
-        getAndSetData();
-        myPlayer.reset();
-        myPlayer.setPlayer(path);
+    public void playPrevOrNext(int k) {
+//        if(listFiles == null) return;
+//
+//        if (AppSettings.shuffleStatus)
+//            k = MyUtils.random(listFiles.size()) * k;
+//
+//        // set prePositions
+//        prePosition = position;
+//        prePositionGlobal = (position > -1) ? MyUtils.getIndex(Store.AUDIO_FILES, listFiles.get(position)) : -1;
+//
+//        position = (position+k) % listFiles.size();
+//        // get new position
+//        while (position != prePosition) {
+//            // after left most
+//            if (position < 0) position = listFiles.size()-1;
+//            MyAudioFile audio = listFiles.get(position);
+//            // check is valid
+//            if (audio != null && !audio.getPath().isEmpty() && new File(audio.getPath()).exists())    break;
+//            // update
+//            position = (position+k) % listFiles.size();
+//        }
+//
+//        if (position == -1) return;
+//
+//        getAndSetData();
+//        myPlayer.reset();
+//        myPlayer.setPlayer(path);
     }
 
     public void getAndSetData() {
@@ -319,63 +350,84 @@ public class MyAudioPlayer{
 
     // set seek bar
     public void setSeekBars() {
-        int audioDuration = myPlayer.getDuration();
-        if (setSeekBar != null)
-            for (View sb : setSeekBar)
-                if (sb != null) {
-                    SeekBar seekBar = (SeekBar) sb;
-                    seekBar.setMax(audioDuration);
-                    // Update the MediaPlayer's position when the user drags the SeekBar
-                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                        @Override
-                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            if (fromUser) {
-                                myPlayer.seekTo(progress);
-                            }
-                        }
-
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
-                            // Pause the audio while the user is dragging the SeekBar
-                            seekWasPlaying = myPlayer.isPlaying();
-                            myPlayer.pause();
-                        }
-
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-                            // Resume audio playback after the user stops dragging the SeekBar
-                            if (seekWasPlaying) myPlayer.start();
-                            updateSeekBarAndDurationText();
-                        }
-                    });
-                }
+//        int audioDuration = myPlayer.getDuration();
+//        if (setSeekBar != null)
+//            for (View sb : setSeekBar)
+//                if (sb != null) {
+//                    SeekBar seekBar = (SeekBar) sb;
+//                    seekBar.setMax(audioDuration);
+//                    // Update the MediaPlayer's position when the user drags the SeekBar
+//                    seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//                        @Override
+//                        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                            if (fromUser) {
+//                                myPlayer.seekTo(progress);
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onStartTrackingTouch(SeekBar seekBar) {
+//                            // Pause the audio while the user is dragging the SeekBar
+//                            seekWasPlaying = myPlayer.isPlaying();
+//                            myPlayer.pause();
+//                        }
+//
+//                        @Override
+//                        public void onStopTrackingTouch(SeekBar seekBar) {
+//                            // Resume audio playback after the user stops dragging the SeekBar
+//                            if (seekWasPlaying) myPlayer.start();
+//                            updateSeekBarAndDurationText();
+//                        }
+//                    });
+//                }
     }
 
     Handler handler = new Handler();  // Create a new Handler
     private void updateSeekBarAndDurationText() {
         try {
-            int crrDuration = myPlayer.getCurrentPosition();
-            // check isCompete
-            if (isComplete) {crrDuration = 0; isComplete = false;}
-            if (setSeekBar != null)
-                for (View sb : setSeekBar)
-                    if (sb != null) ((SeekBar)sb).setProgress(crrDuration);
-
-            if (setTv_liveDuration != null)
-                for (View tv : setTv_liveDuration)
-                    if (tv != null) ((TextView)tv).setText(MyUtils.getDurationFormatted(crrDuration));
-
-            if (myPlayer.isPlaying()) {
-                // Post a delayed action to update again after 100 milliseconds
-                handler.postDelayed(this::updateSeekBarAndDurationText, 1000);
-            }
+//            int crrDuration = myPlayer.getCurrentPosition();
+//            // check isCompete
+//            if (isComplete) {crrDuration = 0; isComplete = false;}
+//            if (setSeekBar != null)
+//                for (View sb : setSeekBar)
+//                    if (sb != null) ((SeekBar)sb).setProgress(crrDuration);
+//
+//            if (setTv_liveDuration != null)
+//                for (View tv : setTv_liveDuration)
+//                    if (tv != null) ((TextView)tv).setText(MyUtils.getDurationFormatted(crrDuration));
+//
+//            if (myPlayer.isPlaying()) {
+//                // Post a delayed action to update again after 100 milliseconds
+//                handler.postDelayed(this::updateSeekBarAndDurationText, 1000);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public MyMediaPlayer getMyPlayer() {
-        return myPlayer;
+
+
+
+
+
+    private void startMusicService(String action) {
+        this.startMusicService(action, null);
+    }
+    private void startMusicService(String action, String path) {
+        Intent serviceIntent = new Intent(context, MusicService.class);
+        if (!path.isEmpty())
+            serviceIntent.putExtra(Keys.EXTRA_PATH, path);
+
+        serviceIntent.setAction(action);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(serviceIntent);
+        } else {
+            context.startService(serviceIntent);
+        }
+    }
+
+    private void stopMusicService() {
+        context.stopService(new Intent(context, MusicService.class));
     }
 }

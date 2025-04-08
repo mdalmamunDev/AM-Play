@@ -7,38 +7,39 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
 import com.example.amplaybyalmamun.R;
+import com.example.amplaybyalmamun.gadgets.enums.Keys;
 
 public class MusicService extends Service {
     private MediaPlayer mediaPlayer;
-    public static final String ACTION_PLAY = "PLAY";
-    public static final String ACTION_PAUSE = "PAUSE";
-    public static final String ACTION_STOP = "STOP";
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mediaPlayer = MediaPlayer.create(this, R.raw.sample_music); // Load your audio file
-        mediaPlayer.setLooping(true); // Loop the music
-    }
+    private int musicState = Keys.STATE_STOPPED; // Default state is stopped
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
-        if (ACTION_PLAY.equals(action)) {
-            playMusic();
-        } else if (ACTION_PAUSE.equals(action)) {
-            pauseMusic();
-        } else if (ACTION_STOP.equals(action)) {
-            stopSelf();
+
+        // Load music if not yet initialized
+        if (mediaPlayer == null && intent.hasExtra(Keys.EXTRA_PATH)) {
+            String path = intent.getStringExtra(Keys.EXTRA_PATH); // default fallback
+            mediaPlayer = MediaPlayer.create(this, Uri.parse(path));
+            mediaPlayer.setLooping(true);
         }
 
-        // Start the service as a foreground service
+        if (Keys.ACTION_PLAY.equals(action)) {
+            playMusic();
+        } else if (Keys.ACTION_PAUSE.equals(action)) {
+            pauseMusic();
+        } else if (Keys.ACTION_STOP.equals(action)) {
+            stopMusic();
+        }
+
         startForeground(1, createNotification());
 
         return START_STICKY;
@@ -47,13 +48,32 @@ public class MusicService extends Service {
     private void playMusic() {
         if (!mediaPlayer.isPlaying()) {
             mediaPlayer.start();
+            musicState = Keys.STATE_PLAYING;
+            sendMusicStateBroadcast(musicState); // Notify state change
         }
     }
 
     private void pauseMusic() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
+            musicState = Keys.STATE_PAUSED;
+            sendMusicStateBroadcast(musicState); // Notify state change
         }
+    }
+
+    private void stopMusic() {
+        if (mediaPlayer.isPlaying() || musicState == Keys.STATE_PAUSED) {
+            mediaPlayer.stop();
+            musicState = Keys.STATE_STOPPED;
+            sendMusicStateBroadcast(musicState); // Notify state change
+            stopSelf();
+        }
+    }
+
+    private void sendMusicStateBroadcast(int state) {
+        Intent intent = new Intent(Keys.MUSIC_STATE_CHANGED);
+        intent.putExtra("state", state);
+        sendBroadcast(intent); // Send the broadcast
     }
 
     private Notification createNotification() {
@@ -65,26 +85,38 @@ public class MusicService extends Service {
         }
 
         PendingIntent playIntent = PendingIntent.getService(this, 0,
-                new Intent(this, MusicService.class).setAction(ACTION_PLAY),
+                new Intent(this, MusicService.class).setAction(Keys.ACTION_PLAY),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         PendingIntent pauseIntent = PendingIntent.getService(this, 0,
-                new Intent(this, MusicService.class).setAction(ACTION_PAUSE),
+                new Intent(this, MusicService.class).setAction(Keys.ACTION_PAUSE),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         PendingIntent stopIntent = PendingIntent.getService(this, 0,
-                new Intent(this, MusicService.class).setAction(ACTION_STOP),
+                new Intent(this, MusicService.class).setAction(Keys.ACTION_STOP),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         return new NotificationCompat.Builder(this, channelId)
                 .setContentTitle("Music Player")
-                .setContentText("Playing music...")
+                .setContentText(getMusicStateText()) // Display current state in notification
                 .setSmallIcon(R.drawable.ic_play_40)
                 .addAction(R.drawable.ic_play_40, "Play", playIntent)
                 .addAction(R.drawable.ic_pause_40, "Pause", pauseIntent)
                 .addAction(R.drawable.ic_pause_40, "Stop", stopIntent)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build();
+    }
+
+    private String getMusicStateText() {
+        switch (musicState) {
+            case Keys.STATE_PLAYING:
+                return "Playing music...";
+            case Keys.STATE_PAUSED:
+                return "Music paused";
+            case Keys.STATE_STOPPED:
+            default:
+                return "Music stopped";
+        }
     }
 
     @Override
@@ -101,4 +133,3 @@ public class MusicService extends Service {
         return null;
     }
 }
-

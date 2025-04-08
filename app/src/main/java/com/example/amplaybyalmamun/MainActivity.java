@@ -41,7 +41,6 @@ import com.example.amplaybyalmamun.process.AccessAudioFiles;
 import com.example.amplaybyalmamun.process.AppSettings;
 import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.process.MyAudioPlayer;
-import com.example.amplaybyalmamun.process.MyMediaPlayer;
 import com.example.amplaybyalmamun.gadgets.MyViews;
 import com.example.amplaybyalmamun.adaptes.ViewPagerAdapter;
 import com.example.amplaybyalmamun.threads.Thread_Refresh;
@@ -131,15 +130,15 @@ public class MainActivity extends AppCompatActivity {
 
         // play bar
         playBar_left.setOnClickListener(v -> {
-            if(MyAudioPlayer.prevPlayer == null) return;
-
-            // assigning listFile of PlayAudio before start activity
-            if (playing_queue == null || playing_queue.size() == 0)
-                playing_queue = AUDIO_FILES;
-
-            Intent intent = new Intent(MainActivity.this, PlayAudio.class);
-            intent.putExtra(Keys.OPEN_BY, Keys.PLAY_BAR);
-            startActivity(intent);
+//            if(MyAudioPlayer.prevPlayer == null) return;
+//
+//            // assigning listFile of PlayAudio before start activity
+//            if (playing_queue == null || playing_queue.size() == 0)
+//                playing_queue = AUDIO_FILES;
+//
+//            Intent intent = new Intent(MainActivity.this, PlayAudio.class);
+//            intent.putExtra(Keys.OPEN_BY, Keys.PLAY_BAR);
+//            startActivity(intent);
         });
 
 
@@ -216,13 +215,9 @@ public class MainActivity extends AppCompatActivity {
                     viewMap.put(MyViews.TV_LIVE_DURATION,   PlayAudio.setTv_liveDuration);
                     viewMap.put(MyViews.SEEK_BAR,           PlayAudio.setSeekBar);
 
-                MyMediaPlayer mediaPlayer = new MyMediaPlayer(context, AUDIO_FILES, PlayAudio.setBtn_playPause);
                 MyAudioPlayer.position = getLatPlayedIdx(context, AUDIO_FILES);
                 MyAudioPlayer.playFromPlayBar = true; // for pause first time
-                MyAudioPlayer player = new MyAudioPlayer(context, AUDIO_FILES, mediaPlayer, viewMap);
-
-                // set Previous Player
-                MyAudioPlayer.prevPlayer = player.getMyPlayer();
+                MyAudioPlayer player = new MyAudioPlayer(context, AUDIO_FILES, viewMap);
 
                 // set seekBar
                 player.setSeekBars();

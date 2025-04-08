@@ -4,14 +4,15 @@ package com.example.amplaybyalmamun;
 import static com.example.amplaybyalmamun.gadgets.utils.Store.AUDIO_FILES;
 import static com.example.amplaybyalmamun.gadgets.utils.Store.playing_queue;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -25,13 +26,10 @@ import androidx.appcompat.widget.PopupMenu;
 
 import com.example.amplaybyalmamun.gadgets.utils.Store;
 import com.example.amplaybyalmamun.process.AppSettings;
-import com.example.amplaybyalmamun.process.DB_Helper;
 import com.example.amplaybyalmamun.gadgets.utils.MyUtils;
 import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
-import com.example.amplaybyalmamun.process.MusicService;
 import com.example.amplaybyalmamun.process.MyAudioPlayer;
-import com.example.amplaybyalmamun.process.MyMediaPlayer;
 import com.example.amplaybyalmamun.gadgets.MyViews;
 import com.example.amplaybyalmamun.process.PlayListHandler;
 
@@ -42,7 +40,6 @@ import java.util.Set;
 public class PlayAudio extends AppCompatActivity {
 
     MyAudioFile file;
-    MyMediaPlayer audioPlayer;
     AppSettings settings;
     boolean isFav, shuffleStatus;
     int repeatStatus;
@@ -68,6 +65,7 @@ public class PlayAudio extends AppCompatActivity {
     String activity_open_by = "";
 
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,55 +109,25 @@ public class PlayAudio extends AppCompatActivity {
                 setBtn_prev = new HashSet<>(),
                 setTagField = new HashSet<>();
 
-        // blur bg
         setBg_blur.add(findViewById(R.id.blurBg_playBar));
-        // playing from
         setTv_playingFrom.add(tv_PlayingFrom);
-        // touchable view
         set_touchableView.add(findViewById(R.id.touchableView));
-        // album art
         setTv_albumArt.add(iv_albumArt);
-        // title
         setTv_title.add(tv_title);
-        // artist
         setTv_artist.add(tv_artists);
-        // duration
         setTv_duration.add(tv_duration);
-        // live duration
         setTv_liveDuration.add(tv_liveDuration);
-        // seek bar
         setSeekBar.add(seekBar);
-        // btn favorite
         setBtn_favorite.add(btnFavorite);
-        // btn play pause
         setBtn_playPause.add(btnPlayPause);
-        // btn next
         setBtn_next.add(btnNext);
-        // btn prev
         setBtn_prev.add(btnPrev);
-        // tag field
         setTagField.add(tagsField);
 
 
 
         // check
-        if(activity_open_by != null && activity_open_by.equals(Keys.PLAY_BAR) && MyAudioPlayer.prevPlayer != null) {
-            // set position
-            MyAudioPlayer.position = position;
-            // it's need to add playPause buttons again
-            MyAudioPlayer.prevPlayer.setPlayPauseBtns(setBtn_playPause);
-            audioPlayer = MyAudioPlayer.prevPlayer;
-        } else {
-            // reset positions
-            MyAudioPlayer.prePositionGlobal = MyUtils.getLatPlayedIdx(this, Store.AUDIO_FILES);
-            MyAudioPlayer.position = position;
-            // reset Previous Player
-            if (MyAudioPlayer.prevPlayer != null) {
-                MyAudioPlayer.prevPlayer.release();
-                MyAudioPlayer.prevPlayer = null;
-            }
-            audioPlayer = new MyMediaPlayer(this, playing_queue, setBtn_playPause);
-        }
+        MyAudioPlayer.position = position;
         // set media player
         HashMap<MyViews, Set<View>> viewMap = new HashMap<>();
         viewMap.put(MyViews.BG_BLUR, setBg_blur);
@@ -177,10 +145,15 @@ public class PlayAudio extends AppCompatActivity {
         viewMap.put(MyViews.BTN_PREV,           setBtn_prev);
         viewMap.put(MyViews.TAGS_FIELD,         setTagField);
 
-        MyAudioPlayer player = new MyAudioPlayer(this, playing_queue, audioPlayer, viewMap);
+        MyAudioPlayer player = new MyAudioPlayer(this, playing_queue, viewMap);
 
-        // set Previous Player
-        MyAudioPlayer.prevPlayer = player.getMyPlayer();
+        // Register the receiver
+        IntentFilter filter = new IntentFilter(Keys.MUSIC_STATE_CHANGED);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(player, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(player, filter);
+        }
     /* * Media Player End * */
 
     // add to playlist
@@ -233,8 +206,8 @@ public class PlayAudio extends AppCompatActivity {
     // back
         btnBack.setOnClickListener(v -> {
             MyUtils.setOnClickAnim(v);
-//            finish();
-            startMusicService(MusicService.ACTION_PLAY);
+            finish();
+//            startMusicService(MusicService.ACTION_PLAY);
         });
 
     // more options
@@ -327,19 +300,5 @@ public class PlayAudio extends AppCompatActivity {
         Intent i = new Intent(PlayAudio.this, EditAudioMetadata.class);
         i.putExtra(Keys.POSITION, MyUtils.getIndex(Store.AUDIO_FILES, playing_queue.get(position)));
         PlayAudio.this.startActivity(i);
-    }
-
-    private void startMusicService(String action) {
-        Intent serviceIntent = new Intent(this, MusicService.class);
-        serviceIntent.setAction(action);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
-        }
-    }
-
-    private void stopMusicService() {
-        stopService(new Intent(this, MusicService.class));
     }
 }

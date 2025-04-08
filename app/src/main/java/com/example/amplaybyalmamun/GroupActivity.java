@@ -28,7 +28,6 @@ import com.example.amplaybyalmamun.gadgets.enums.Keys;
 import com.example.amplaybyalmamun.gadgets.models.MyAudioFile;
 import com.example.amplaybyalmamun.gadgets.utils.Store;
 import com.example.amplaybyalmamun.process.MyAudioPlayer;
-import com.example.amplaybyalmamun.process.MyMediaPlayer;
 import com.example.amplaybyalmamun.gadgets.MyViews;
 import com.example.amplaybyalmamun.gadgets.models.TagBarItems;
 import com.example.amplaybyalmamun.threads.TagBarLoader;
@@ -86,8 +85,6 @@ public class GroupActivity extends AppCompatActivity {
 
 
     /* Play Bar */
-        MyMediaPlayer mediaPlayer = MyAudioPlayer.prevPlayer;
-        mediaPlayer.addPlayPauseBtn(playBar_btn_playPause);
         // set list view
             // blur bg
             PlayAudio.setBg_blur.add(findViewById(R.id.blurBg_playBar));
@@ -120,25 +117,21 @@ public class GroupActivity extends AppCompatActivity {
 
         MyAudioPlayer.position = getLatPlayedIdx(this, AUDIO_FILES);
         MyAudioPlayer.playFromPlayBar = true; // for pause first time
-        MyAudioPlayer player = new MyAudioPlayer(this, AUDIO_FILES, mediaPlayer, viewMap);
-
-        // set Previous Player
-        MyAudioPlayer.prevPlayer = player.getMyPlayer();
-
+        MyAudioPlayer player = new MyAudioPlayer(this, AUDIO_FILES, viewMap);
 
         // set seekBar
         player.setSeekBars();
 
         playBar_left.setOnClickListener(v -> {
-            if(MyAudioPlayer.prevPlayer == null) return;
-
-            // assigning listFile of PlayAudio before start activity
-            if (playing_queue == null || playing_queue.size() == 0)
-                playing_queue = AUDIO_FILES;
-
-            Intent intent = new Intent(GroupActivity.this, PlayAudio.class);
-            intent.putExtra(Keys.OPEN_BY, Keys.PLAY_BAR);
-            startActivity(intent);
+//            if(MyAudioPlayer.prevPlayer == null) return;
+//
+//            // assigning listFile of PlayAudio before start activity
+//            if (playing_queue == null || playing_queue.size() == 0)
+//                playing_queue = AUDIO_FILES;
+//
+//            Intent intent = new Intent(GroupActivity.this, PlayAudio.class);
+//            intent.putExtra(Keys.OPEN_BY, Keys.PLAY_BAR);
+//            startActivity(intent);
         });
     /* Play Bar End */
 

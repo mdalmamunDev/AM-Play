@@ -10,4 +10,13 @@ public class Keys {
     // sort
     public static String SORT_ASC = " ASC";
     public static String SORT_DESC = " DESC";
+    public static String MUSIC_STATE_CHANGED = "com.example.amplaybyalmamun.MUSIC_STATE_CHANGED";
+    public static final String EXTRA_PATH = "EXTRA_PATH";
+    public static final String ACTION_PLAY = "PLAY";
+    public static final String ACTION_PAUSE = "PAUSE";
+    public static final String ACTION_STOP = "STOP";
+
+    public static final int STATE_PLAYING = 1;
+    public static final int STATE_PAUSED = 2;
+    public static final int STATE_STOPPED = 3;
 }
